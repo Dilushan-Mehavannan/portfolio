@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mehavannan Dilushan | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Noise overlay -->
+  <div class="noise"></div>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-logo">MD<span class="dot">.</span></div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle">&#9776;</button>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-bg-text">DILUSHAN</div>
+    <div class="hero-content">
+      <div class="hero-photo-wrap">
+        <div class="hero-photo-ring"></div>
+        <img src="photo.jpg" alt="Mehavannan Dilushan" class="hero-photo" />
+        <div class="hero-status"><span class="status-dot"></span> Open to work</div>
+      </div>
+      <div class="hero-text">
+        <p class="hero-greeting">Hello, I'm</p>
+        <h1 class="hero-name">Mehavannan<br /><span>Dilushan</span></h1>
+        <p class="hero-tagline">IT Fresher &mdash; Physics &amp; Electronics &bull; Full-Stack Enthusiast &bull; Robotics &amp; IoT</p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="#contact" class="btn btn-ghost">Get In Touch</a>
+        </div>
+        <div class="hero-social">
+          <a href="https://github.com/Dilushan-Mehavannan" target="_blank" class="social-link" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-1.93c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.57.23 2.73.11 3.02.74.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" class="social-link" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zm1.78 13.02H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+          </a>
+          <a href="mailto:dilushanmehavannan@gmail.com" class="social-link" title="Email">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2>About Me</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="about-lead">I'm an IT fresher with a passion for building creative solutions at the intersection of software and hardware.</p>
+          <p>Currently reading for a <strong>BSc in Applied Physics and Electronics</strong> at the Eastern University of Sri Lanka and a <strong>BIT</strong> at the University of Moratuwa. I combine a solid foundation in programming, electronics, and networking to tackle real-world engineering challenges.</p>
+          <p>From PCB design to web development, from Arduino projects to networking with Wireshark — I love exploring every layer of the technology stack.</p>
+          <div class="about-meta">
+            <div class="meta-item"><span class="meta-label">Location</span><span>Trincomalee, Sri Lanka</span></div>
+            <div class="meta-item"><span class="meta-label">Email</span><span>dilushanmehavannan@gmail.com</span></div>
+            <div class="meta-item"><span class="meta-label">Phone</span><span>+94 71 287 5703</span></div>
+            <div class="meta-item"><span class="meta-label">Status</span><span class="open-tag">Open to Opportunities</span></div>
+          </div>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <span class="stat-num" id="repoCount">—</span>
+            <span class="stat-label">GitHub Repos</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">2+</span>
+            <span class="stat-label">Years Studying IT</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">2</span>
+            <span class="stat-label">Degrees (Reading)</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">1st</span>
+            <span class="stat-label">Robotics Runner-Up</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2>Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h3>Languages</h3>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">PHP</span>
+            <span class="tag">C++</span>
+            <span class="tag">C# (.NET)</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Databases</h3>
+          <div class="skill-tags">
+            <span class="tag">MySQL</span>
+            <span class="tag">Microsoft SQL</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Hardware & Electronics</h3>
+          <div class="skill-tags">
+            <span class="tag">Arduino</span>
+            <span class="tag">PCB Design (EasyEDA)</span>
+            <span class="tag">PCB Fabrication</span>
+            <span class="tag">Embedded Systems</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Tools & Networking</h3>
+          <div class="skill-tags">
+            <span class="tag">GitHub</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">Microsoft Office</span>
+            <span class="tag">VS Code</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Soft Skills</h3>
+          <div class="skill-tags">
+            <span class="tag">Problem Solving</span>
+            <span class="tag">Communication</span>
+            <span class="tag">Adaptability</span>
+            <span class="tag">Team Work</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Languages Spoken</h3>
+          <div class="skill-tags">
+            <span class="tag">Tamil (Native)</span>
+            <span class="tag">English (Intermediate)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GitHub Projects -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2>GitHub Projects</h2>
+        <a href="https://github.com/Dilushan-Mehavannan" target="_blank" class="gh-link">View All on GitHub ↗</a>
+      </div>
+      <div class="gh-profile-card" id="ghProfileCard">
+        <div class="gh-avatar-wrap">
+          <img id="ghAvatar" src="" alt="GitHub Avatar" class="gh-avatar" />
+        </div>
+        <div class="gh-info">
+          <h3 id="ghName">Loading...</h3>
+          <p id="ghBio"></p>
+          <div class="gh-stats">
+            <span><strong id="ghRepos">—</strong> Repos</span>
+            <span><strong id="ghFollowers">—</strong> Followers</span>
+            <span><strong id="ghFollowing">—</strong> Following</span>
+          </div>
+        </div>
+      </div>
+      <div class="projects-filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="JavaScript">JavaScript</button>
+        <button class="filter-btn" data-filter="Python">Python</button>
+        <button class="filter-btn" data-filter="HTML">HTML</button>
+        <button class="filter-btn" data-filter="C++">C++</button>
+        <button class="filter-btn" data-filter="PHP">PHP</button>
+      </div>
+      <div class="projects-grid" id="projectsGrid">
+        <div class="project-skeleton"></div>
+        <div class="project-skeleton"></div>
+        <div class="project-skeleton"></div>
+        <div class="project-skeleton"></div>
+        <div class="project-skeleton"></div>
+        <div class="project-skeleton"></div>
+      </div>
+      <div id="ghError" class="gh-error" style="display:none;">
+        <p>Could not load GitHub projects. <a href="https://github.com/DilushanMehavannan" target="_blank">View on GitHub →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GitHub Activity -->
+  <section id="activity">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">03B</span>
+        <h2>GitHub Activity</h2>
+      </div>
+      <div class="activity-grid" id="activityGrid">
+        <div class="activity-loading">Loading recent activity...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Achievements -->
+  <section id="achievements">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2>Achievements</h2>
+      </div>
+      <div class="achievements-list">
+        <div class="achievement-card">
+          <div class="ach-icon">🏆</div>
+          <div class="ach-content">
+            <h3>Robotics Competition — 1st Runner Up</h3>
+            <p>Trincomalee Campus, Eastern University · 2025</p>
+          </div>
+          <span class="ach-year">2025</span>
+        </div>
+        <div class="achievement-card">
+          <div class="ach-icon">🚀</div>
+          <div class="ach-content">
+            <h3>SLIOT Semi-Finalist</h3>
+            <p>Sri Lanka Internet of Things Competition · TechGenZ Team · 2026</p>
+          </div>
+          <span class="ach-year">2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2>Education</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">Present</span>
+            <h3>BSc Applied Physics and Electronics (Internal)</h3>
+            <p>Eastern University of Sri Lanka — Trincomalee Campus</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">Present</span>
+            <h3>BIT — Bachelor of Information Technology (External)</h3>
+            <p>University of Moratuwa</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">2023</span>
+            <h3>Computer Application Assistant — NVQ Level 3</h3>
+            <p>Completed July 15, 2023</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">2021</span>
+            <h3>G.C.E. Advanced Level — Physical Science</h3>
+            <p>Combined Mathematics (S) · Physics (S) · Chemistry (C)</p>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-date">2018</span>
+            <h3>G.C.E. Ordinary Level</h3>
+            <p>4A · 4B · 1C · Mathematics (A) · English (C)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2>Get In Touch</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <p class="contact-intro">I'm open to opportunities, collaborations, and interesting conversations. Feel free to reach out!</p>
+          <div class="contact-items">
+            <a href="mailto:dilushanmehavannan@gmail.com" class="contact-item">
+              <div class="ci-icon">✉</div>
+              <div>
+                <span class="ci-label">Email</span>
+                <span class="ci-val">dilushanmehavannan@gmail.com</span>
+              </div>
+            </a>
+            <a href="tel:+94712875703" class="contact-item">
+              <div class="ci-icon">📱</div>
+              <div>
+                <span class="ci-label">Phone</span>
+                <span class="ci-val">+94 71 287 5703</span>
+              </div>
+            </a>
+            <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" class="contact-item">
+              <div class="ci-icon">in</div>
+              <div>
+                <span class="ci-label">LinkedIn</span>
+                <span class="ci-val">Dilushan Mehavannan</span>
+              </div>
+            </a>
+            <a href="https://github.com/Dilushan-Mehavannan" target="_blank" class="contact-item">
+              <div class="ci-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-1.93c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.57.23 2.73.11 3.02.74.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
+              </div>
+              <div>
+                <span class="ci-label">GitHub</span>
+                <span class="ci-val">Dilushan-Mehavannan</span>
+              </div>
+            </a>
+            <div class="contact-item no-link">
+              <div class="ci-icon">📍</div>
+              <div>
+                <span class="ci-label">Location</span>
+                <span class="ci-val">284, Anpuvalipuram, Trincomalee, Sri Lanka</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm" onsubmit="handleForm(event)">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Your Name" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea name="message" rows="5" placeholder="Tell me about your project or opportunity..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">Send Message ↗</button>
+          <p id="formMsg" style="display:none; margin-top:1rem; color: var(--accent);"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">MD<span class="dot">.</span></span>
+        <p>© 2026 Mehavannan Dilushan. Built with ♥ &amp; passion.</p>
+        <div class="footer-links">
+          <a href="https://github.com/Dilushan-Mehavannan" target="_blank">GitHub</a>
+          <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank">LinkedIn</a>
+          <a href="mailto:dilushanmehavannan@gmail.com">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
