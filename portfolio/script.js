@@ -200,6 +200,7 @@ async function loadActivity() {
 
     if (!events || events.length === 0) {
       activityGrid.innerHTML = '<p style="color:var(--ash)">No recent activity found.</p>';
+      updateActivityTimestamp();
       return;
     }
 
@@ -245,10 +246,36 @@ async function loadActivity() {
       `;
     }).join('');
 
+    updateActivityTimestamp();
+
   } catch (err) {
     document.getElementById('activityGrid').innerHTML = '<p style="color:var(--ash)">Could not load activity.</p>';
+    console.error('Activity load error:', err);
   }
 }
+
+// Update timestamp and disable button during refresh
+function updateActivityTimestamp() {
+  const timestamp = new Date().toLocaleTimeString();
+  const statusEl = document.querySelector('.activity-last-updated');
+  if (statusEl) {
+    statusEl.textContent = `Last updated: ${timestamp}`;
+  }
+}
+
+// Manual refresh button
+document.addEventListener('DOMContentLoaded', () => {
+  const refreshBtn = document.getElementById('refreshActivityBtn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.disabled = true;
+      refreshBtn.textContent = '⏳ Refreshing...';
+      await loadActivity();
+      refreshBtn.disabled = false;
+      refreshBtn.textContent = '🔄 Refresh';
+    });
+  }
+});
 
 // ========================
 // FALLBACK PROJECTS
@@ -331,6 +358,16 @@ async function handleForm(e) {
     submitBtn.disabled = false;
   }
 }
+
+// ========================
+// AUTO-REFRESH GITHUB DATA
+// ========================
+// Refresh GitHub data every 5 minutes (300,000 ms)
+setInterval(() => {
+  console.log('🔄 Auto-refreshing GitHub data...');
+  loadGitHub();
+  loadActivity();
+}, 300000); // 5 minutes
 
 // ========================
 // INIT
