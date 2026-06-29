@@ -310,48 +310,42 @@ function showFallbackProjects() {
 // ========================
 // CONTACT FORM
 // ========================
+const FORMSPREE_URL = 'https://formspree.io/f/mojolrbo';
+
 async function handleForm(e) {
   e.preventDefault();
-  
+
   const form = e.target;
   const formData = new FormData(form);
   const msg = document.getElementById('formMsg');
   const submitBtn = document.getElementById('submitBtn');
-  
-  // Show loading state
+
   msg.style.display = 'block';
   msg.textContent = '⏳ Sending your message...';
   msg.style.color = 'var(--accent)';
   submitBtn.disabled = true;
-  
+
   try {
-    const response = await fetch('http://localhost:5000/api/contact', {
+    const response = await fetch(FORMSPREE_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: formData.get('name'),
-        email: formData.get('email'),
-        message: formData.get('message')
-      })
+      headers: { 'Accept': 'application/json' },
+      body: formData
     });
-    
-    const result = await response.json();
-    
-    if (result.success) {
+
+    if (response.ok) {
       msg.textContent = '✓ Message sent! I\'ll get back to you soon.';
       msg.style.color = 'var(--accent)';
       form.reset();
       setTimeout(() => { msg.style.display = 'none'; }, 5000);
     } else {
-      msg.textContent = '✗ ' + result.message;
+      const result = await response.json();
+      msg.textContent = '✗ ' + (result.errors?.[0]?.message || 'Something went wrong.');
       msg.style.color = '#ff6b6b';
       setTimeout(() => { msg.style.display = 'none'; }, 5000);
     }
   } catch (error) {
     console.error('Form submission error:', error);
-    msg.textContent = '✗ Error sending message. Make sure the server is running.';
+    msg.textContent = '✗ Network error. Please try again.';
     msg.style.color = '#ff6b6b';
     setTimeout(() => { msg.style.display = 'none'; }, 5000);
   } finally {
