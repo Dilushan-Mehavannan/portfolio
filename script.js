@@ -1,115 +1,13 @@
-// ========================
-// CUSTOM CURSOR
-// ========================
-const cursor = document.getElementById('cursor');
-const follower = document.getElementById('cursorFollower');
-let mx = 0, my = 0;
+/* ==========================================================================
+   MEHAVANNAN DILUSHAN - PORTFOLIO INTERACTIVITY & GITHUB ENGINE
+   ========================================================================== */
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-  follower.style.left = mx + 'px';
-  follower.style.top = my + 'px';
-});
-
-document.querySelectorAll('a, button, .project-card, .skill-category, .stat-card').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
-    follower.style.transform = 'translate(-50%,-50%) scale(1.5)';
-  });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
-    follower.style.transform = 'translate(-50%,-50%) scale(1)';
-  });
-});
-
-// ========================
-// NAVBAR SCROLL + TOGGLE
-// ========================
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    navbar.style.padding = '0.8rem 4rem';
-  } else {
-    navbar.style.padding = '1.2rem 4rem';
-  }
-});
-
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.querySelector('.nav-links');
-navToggle.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-});
-navLinks.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => navLinks.classList.remove('open'));
-});
-
-// ========================
-// SCROLL REVEAL
-// ========================
-const reveals = document.querySelectorAll('section, .project-card, .achievement-card, .tl-item, .skill-category, .stat-card');
-reveals.forEach(el => el.classList.add('reveal'));
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.08 });
-
-reveals.forEach(el => observer.observe(el));
-
-// ========================
-// GITHUB API
-// ========================
 const GITHUB_USER = 'Dilushan-Mehavannan';
-
-async function loadGitHub() {
-  try {
-    // Fetch user profile
-    const userRes = await fetch(`https://api.github.com/users/${GITHUB_USER}`);
-    const user = await userRes.json();
-
-    if (user.message) throw new Error('User not found');
-
-    // Update profile card
-    document.getElementById('ghAvatar').src = user.avatar_url;
-    document.getElementById('ghName').textContent = user.name || user.login;
-    document.getElementById('ghBio').textContent = user.bio || 'Developer | Physics & Electronics | Sri Lanka';
-    document.getElementById('ghRepos').textContent = user.public_repos;
-    document.getElementById('ghFollowers').textContent = user.followers;
-    document.getElementById('ghFollowing').textContent = user.following;
-    document.getElementById('repoCount').textContent = user.public_repos;
-
-    // Fetch repos
-    const reposRes = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=30`);
-    const repos = await reposRes.json();
-
-    allRepos = repos.filter(r => !r.fork);
-    renderProjects(allRepos);
-
-    // Fetch events
-    loadActivity();
-
-  } catch (err) {
-    console.error('GitHub API error:', err);
-    // Show fallback content
-    showFallbackProjects();
-    document.getElementById('ghError').style.display = 'block';
-    // Set fallback avatar
-    document.getElementById('ghAvatar').src = 'https://avatars.githubusercontent.com/u/0?v=4';
-    document.getElementById('ghName').textContent = 'Mehavannan Dilushan';
-    document.getElementById('ghBio').textContent = 'IT Student | Physics & Electronics | Robotics Enthusiast';
-    document.getElementById('ghRepos').textContent = '—';
-    document.getElementById('ghFollowers').textContent = '—';
-    document.getElementById('ghFollowing').textContent = '—';
-  }
-}
+const FORMSPREE_URL = 'https://formspree.io/f/mojolrbo';
 
 let allRepos = [];
 
+// Language color mapping
 const langColors = {
   JavaScript: '#f1e05a',
   Python: '#3572A5',
@@ -121,256 +19,374 @@ const langColors = {
   TypeScript: '#2b7489',
   Java: '#b07219',
   C: '#555555',
-  default: '#6e7681'
+  Shell: '#89e051',
+  default: '#6366f1'
 };
 
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const days = Math.floor(diff / 86400000);
-  if (days === 0) return 'today';
-  if (days === 1) return '1 day ago';
-  if (days < 30) return `${days} days ago`;
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  return `${Math.floor(months / 12)}y ago`;
+// Initialize on DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  initCursor();
+  initNavbar();
+  initSpotlights();
+  initSkillsFilter();
+  initProjectControls();
+  
+  loadGitHubData();
+});
+
+/* --------------------------------------------------------------------------
+   1. CUSTOM CURSOR ENGINE
+   -------------------------------------------------------------------------- */
+function initCursor() {
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  
+  if (!cursor || !follower) return;
+
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    
+    follower.style.left = e.clientX + 'px';
+    follower.style.top = e.clientY + 'px';
+  });
+
+  const interactiveElements = document.querySelectorAll('a, button, .project-card, .expertise-card, .skill-badge, .contact-card');
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      follower.style.transform = 'translate(-50%, -50%) scale(1.6)';
+      follower.style.borderColor = 'rgba(99, 102, 241, 0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      follower.style.transform = 'translate(-50%, -50%) scale(1)';
+      follower.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   2. NAVBAR & MOBILE MENU TOGGLE
+   -------------------------------------------------------------------------- */
+function initNavbar() {
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  const navbar = document.getElementById('navbar');
+
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      navbar.style.background = 'rgba(8, 9, 13, 0.95)';
+      navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+    } else {
+      navbar.style.background = 'rgba(8, 9, 13, 0.8)';
+      navbar.style.boxShadow = 'none';
+    }
+  });
+
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. SPOTLIGHT CARD MOUSE TRACKING
+   -------------------------------------------------------------------------- */
+function initSpotlights() {
+  document.querySelectorAll('.spotlight').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   4. SKILLS CATEGORY FILTER
+   -------------------------------------------------------------------------- */
+function initSkillsFilter() {
+  const filterBtns = document.querySelectorAll('.skills-filter-btn');
+  const skillBoxes = document.querySelectorAll('.skill-category-box');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.skillFilter;
+
+      skillBoxes.forEach(box => {
+        if (filter === 'all' || box.dataset.category === filter) {
+          box.style.display = 'block';
+        } else {
+          box.style.display = 'none';
+        }
+      });
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   5. GITHUB DATA ENGINE (PROFILE, REPOS, ACTIVITY)
+   -------------------------------------------------------------------------- */
+async function loadGitHubData() {
+  await Promise.all([
+    fetchProfile(),
+    fetchRepos()
+  ]);
+}
+
+async function fetchProfile() {
+  try {
+    const res = await fetch(`https://api.github.com/users/${GITHUB_USER}`);
+    if (!res.ok) throw new Error('User fetch failed');
+    
+    const user = await res.json();
+
+    const avatarEl = document.getElementById('ghAvatar');
+    if (avatarEl && user.avatar_url) avatarEl.src = user.avatar_url;
+
+    document.getElementById('ghName').textContent = user.name || user.login;
+    document.getElementById('ghBio').textContent = user.bio || 'IT Student • Physics & Electronics Specialist';
+    document.getElementById('ghRepos').textContent = user.public_repos || 0;
+    document.getElementById('ghFollowers').textContent = user.followers || 0;
+    document.getElementById('ghFollowing').textContent = user.following || 0;
+
+    const repoCounter = document.getElementById('repoCounter');
+    if (repoCounter) repoCounter.textContent = user.public_repos || 0;
+
+  } catch (err) {
+    console.warn('GitHub profile API fallback:', err);
+    document.getElementById('ghRepos').textContent = '10+';
+    document.getElementById('repoCounter').textContent = '10+';
+  }
+}
+
+async function fetchRepos() {
+  const grid = document.getElementById('projectsGrid');
+  const errorEl = document.getElementById('ghError');
+
+  try {
+    const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`);
+    if (!res.ok) throw new Error('Repos fetch failed');
+    
+    const repos = await res.json();
+    
+    // Sort & filter repos
+    allRepos = repos.filter(r => !r.fork);
+    
+    if (allRepos.length === 0) {
+      allRepos = repos; // Fallback to all if no non-forks
+    }
+
+    renderProjects(allRepos);
+    if (errorEl) errorEl.style.display = 'none';
+
+  } catch (err) {
+    console.error('GitHub Repos API Error:', err);
+    if (errorEl) errorEl.style.display = 'block';
+    renderFallbackProjects();
+  }
 }
 
 function renderProjects(repos) {
   const grid = document.getElementById('projectsGrid');
+  if (!grid) return;
+
   if (!repos || repos.length === 0) {
-    grid.innerHTML = '<p style="color:var(--ash);grid-column:1/-1">No public repositories found.</p>';
+    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem;">No matching repositories found.</p>';
     return;
   }
 
   grid.innerHTML = repos.map(repo => {
     const lang = repo.language || '';
     const color = langColors[lang] || langColors.default;
+    const formattedName = repo.name.replace(/-/g, ' ').replace(/_/g, ' ');
+    const updatedTime = timeAgo(repo.updated_at);
+    const desc = repo.description || 'Repository for application code and engineering scripts.';
+
     return `
-      <div class="project-card reveal" data-lang="${lang}" onclick="window.open('${repo.html_url}','_blank')">
-        <div class="project-header">
-          <span class="project-name">${repo.name.replace(/-/g, ' ')}</span>
-          <div class="project-links">
-            <a href="${repo.html_url}" target="_blank" class="project-link" onclick="event.stopPropagation()" title="GitHub">
-              <svg viewBox="0 0 16 16" fill="currentColor" width="14"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            </a>
-            ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link" onclick="event.stopPropagation()" title="Live Demo">↗</a>` : ''}
+      <div class="project-card spotlight" onclick="window.open('${repo.html_url}', '_blank')">
+        <div>
+          <div class="project-top-row">
+            <h3 class="project-title">${formattedName}</h3>
+            <div class="project-links">
+              <a href="${repo.html_url}" target="_blank" class="project-link-btn" onclick="event.stopPropagation()" title="GitHub Source">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-1.93c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.57.23 2.73.11 3.02.74.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
+              </a>
+              ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link-btn" onclick="event.stopPropagation()" title="Live Preview">↗</a>` : ''}
+            </div>
           </div>
+          <p class="project-desc-text">${desc}</p>
         </div>
-        <p class="project-desc">${repo.description || 'No description provided.'}</p>
-        <div class="project-meta">
-          ${lang ? `<span><span class="lang-dot" style="background:${color}"></span>${lang}</span>` : ''}
-          <span class="project-stars">★ ${repo.stargazers_count}</span>
-          <span class="project-forks">⎇ ${repo.forks_count}</span>
-          <span class="project-updated">${timeAgo(repo.updated_at)}</span>
+
+        <div class="project-footer-meta">
+          ${lang ? `<span class="project-lang-tag"><span class="skill-dot" style="background:${color}"></span>${lang}</span>` : '<span>Code</span>'}
+          <div class="project-stats-meta">
+            <span>★ ${repo.stargazers_count || 0}</span>
+            <span>⎇ ${repo.forks_count || 0}</span>
+            <span>${updatedTime}</span>
+          </div>
         </div>
       </div>
     `;
   }).join('');
 
-  // Re-observe new cards
-  document.querySelectorAll('.project-card').forEach(el => {
-    el.classList.add('reveal');
-    observer.observe(el);
-  });
+  initSpotlights();
 }
 
-// Filter buttons
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.dataset.filter;
-    if (filter === 'all') {
-      renderProjects(allRepos);
-    } else {
-      renderProjects(allRepos.filter(r => r.language === filter));
-    }
-  });
-});
-
-// ========================
-// GITHUB ACTIVITY
-// ========================
-async function loadActivity() {
-  try {
-    const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/events/public?per_page=10`);
-    const events = await res.json();
-
-    const activityGrid = document.getElementById('activityGrid');
-
-    if (!events || events.length === 0) {
-      activityGrid.innerHTML = '<p style="color:var(--ash)">No recent activity found.</p>';
-      updateActivityTimestamp();
-      return;
-    }
-
-    const eventIcons = {
-      PushEvent: '⬆',
-      CreateEvent: '✦',
-      ForkEvent: '⎇',
-      WatchEvent: '★',
-      IssuesEvent: '●',
-      PullRequestEvent: '⟳',
-      DeleteEvent: '✕',
-      default: '◈'
-    };
-
-    activityGrid.innerHTML = events.slice(0, 8).map(ev => {
-      const icon = eventIcons[ev.type] || eventIcons.default;
-      const repo = ev.repo.name.split('/')[1];
-      let desc = '';
-
-      if (ev.type === 'PushEvent') {
-        const commits = ev.payload.commits?.length || 0;
-        desc = `Pushed ${commits} commit${commits !== 1 ? 's' : ''} to <strong>${repo}</strong>`;
-      } else if (ev.type === 'CreateEvent') {
-        desc = `Created ${ev.payload.ref_type} in <strong>${repo}</strong>`;
-      } else if (ev.type === 'ForkEvent') {
-        desc = `Forked <strong>${repo}</strong>`;
-      } else if (ev.type === 'WatchEvent') {
-        desc = `Starred <strong>${repo}</strong>`;
-      } else if (ev.type === 'IssuesEvent') {
-        desc = `${ev.payload.action} an issue in <strong>${repo}</strong>`;
-      } else {
-        desc = `${ev.type.replace('Event', '')} on <strong>${repo}</strong>`;
-      }
-
-      return `
-        <div class="activity-item">
-          <div class="activity-icon">${icon}</div>
-          <div class="activity-text">
-            <p>${desc}</p>
-          </div>
-          <span class="activity-time">${timeAgo(ev.created_at)}</span>
-        </div>
-      `;
-    }).join('');
-
-    updateActivityTimestamp();
-
-  } catch (err) {
-    document.getElementById('activityGrid').innerHTML = '<p style="color:var(--ash)">Could not load activity.</p>';
-    console.error('Activity load error:', err);
-  }
-}
-
-// Update timestamp and disable button during refresh
-function updateActivityTimestamp() {
-  const timestamp = new Date().toLocaleTimeString();
-  const statusEl = document.querySelector('.activity-last-updated');
-  if (statusEl) {
-    statusEl.textContent = `Last updated: ${timestamp}`;
-  }
-}
-
-// Manual refresh button
-document.addEventListener('DOMContentLoaded', () => {
-  const refreshBtn = document.getElementById('refreshActivityBtn');
-  if (refreshBtn) {
-    refreshBtn.addEventListener('click', async () => {
-      refreshBtn.disabled = true;
-      refreshBtn.textContent = '⏳ Refreshing...';
-      await loadActivity();
-      refreshBtn.disabled = false;
-      refreshBtn.textContent = '🔄 Refresh';
-    });
-  }
-});
-
-// ========================
-// FALLBACK PROJECTS
-// ========================
-function showFallbackProjects() {
-  const grid = document.getElementById('projectsGrid');
+function renderFallbackProjects() {
   const fallbacks = [
-    { name: 'Web Projects', desc: 'HTML, CSS & JavaScript web development projects.', lang: 'HTML', stars: 0 },
-    { name: 'Python Scripts', desc: 'Python automation and scripting projects.', lang: 'Python', stars: 0 },
-    { name: 'Arduino Projects', desc: 'Embedded systems and Arduino coding.', lang: 'C++', stars: 0 },
-    { name: '.NET Applications', desc: 'C# and .NET framework applications.', lang: 'C#', stars: 0 },
-    { name: 'Database Projects', desc: 'MySQL and MSSQL database solutions.', lang: 'PHP', stars: 0 },
-    { name: 'Robotics Code', desc: 'Code for robotics and IoT competitions.', lang: 'C++', stars: 0 },
+    { name: 'Portfolio Website', desc: 'Modern responsive developer portfolio with GitHub API integration.', lang: 'JavaScript', url: `https://github.com/${GITHUB_USER}` },
+    { name: 'Arduino IoT Controller', desc: 'Embedded C++ microcontroller logic for robotics sensors and control.', lang: 'C++', url: `https://github.com/${GITHUB_USER}` },
+    { name: 'Full-Stack Web App', desc: 'Dynamic web solution with database schema and REST API endpoints.', lang: 'PHP', url: `https://github.com/${GITHUB_USER}` },
+    { name: 'Python Automation Scripts', desc: 'Data parsing, automation, and utility tools built with Python.', lang: 'Python', url: `https://github.com/${GITHUB_USER}` },
+    { name: 'Database Management System', desc: 'Relational database architecture and MySQL optimization scripts.', lang: 'C#', url: `https://github.com/${GITHUB_USER}` },
+    { name: 'Physics & Electronics Simulation', desc: 'Circuit designs, PCB layouts, and electronic hardware projects.', lang: 'C++', url: `https://github.com/${GITHUB_USER}` }
   ];
-  grid.innerHTML = fallbacks.map(r => `
-    <div class="project-card" onclick="window.open('https://github.com/${GITHUB_USER}','_blank')">
-      <div class="project-header">
-        <span class="project-name">${r.name}</span>
-        <div class="project-links">
-          <a href="https://github.com/${GITHUB_USER}" target="_blank" class="project-link" onclick="event.stopPropagation()">↗</a>
-        </div>
-      </div>
-      <p class="project-desc">${r.desc}</p>
-      <div class="project-meta">
-        <span><span class="lang-dot" style="background:${langColors[r.lang] || langColors.default}"></span>${r.lang}</span>
-        <span>★ ${r.stars}</span>
-      </div>
-    </div>
-  `).join('');
+
+  renderProjects(fallbacks.map(f => ({
+    name: f.name,
+    description: f.desc,
+    language: f.lang,
+    html_url: f.url,
+    stargazers_count: 0,
+    forks_count: 0,
+    updated_at: new Date().toISOString()
+  })));
 }
 
-// ========================
-// CONTACT FORM
-// ========================
-const FORMSPREE_URL = 'https://formspree.io/f/mojolrbo';
+/* Project Controls (Search & Language Filters) */
+function initProjectControls() {
+  const searchInput = document.getElementById('projectSearch');
+  const filterBtns = document.querySelectorAll('#projectFilters .filter-btn');
 
+  let activeLangFilter = 'all';
+
+  function applyFilters() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+    const filtered = allRepos.filter(repo => {
+      const nameMatch = repo.name.toLowerCase().includes(query);
+      const descMatch = (repo.description || '').toLowerCase().includes(query);
+      const langMatch = (repo.language || '').toLowerCase().includes(query);
+
+      const matchesQuery = !query || nameMatch || descMatch || langMatch;
+      const matchesLang = activeLangFilter === 'all' || (repo.language && repo.language.toLowerCase() === activeLangFilter.toLowerCase());
+
+      return matchesQuery && matchesLang;
+    });
+
+    renderProjects(filtered);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', applyFilters);
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLangFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   6. UTILITY & HELPER FUNCTIONS
+   -------------------------------------------------------------------------- */
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.floor(months / 12)}y ago`;
+}
+
+function copyEmail(emailStr) {
+  navigator.clipboard.writeText(emailStr).then(() => {
+    showToast(`Copied ${emailStr} to clipboard!`);
+  }).catch(err => {
+    showToast('Failed to copy email.');
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3200);
+}
+
+/* --------------------------------------------------------------------------
+   8. FORMSPREE CONTACT FORM HANDLER
+   -------------------------------------------------------------------------- */
 async function handleForm(e) {
   e.preventDefault();
-
   const form = e.target;
-  const formData = new FormData(form);
-  const msg = document.getElementById('formMsg');
   const submitBtn = document.getElementById('submitBtn');
+  const msgEl = document.getElementById('formMsg');
+  const formData = new FormData(form);
 
-  msg.style.display = 'block';
-  msg.textContent = '⏳ Sending your message...';
-  msg.style.color = 'var(--accent)';
   submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span>Sending Message...</span>';
+
+  msgEl.style.display = 'block';
+  msgEl.style.background = 'rgba(99, 102, 241, 0.15)';
+  msgEl.style.color = '#818cf8';
+  msgEl.style.border = '1px solid rgba(99, 102, 241, 0.3)';
+  msgEl.textContent = '⏳ Sending message...';
 
   try {
-    const response = await fetch(FORMSPREE_URL, {
+    const res = await fetch(FORMSPREE_URL, {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
       body: formData
     });
 
-    if (response.ok) {
-      msg.textContent = '✓ Message sent! I\'ll get back to you soon.';
-      msg.style.color = 'var(--accent)';
+    if (res.ok) {
+      msgEl.style.background = 'rgba(16, 185, 129, 0.15)';
+      msgEl.style.color = '#34d399';
+      msgEl.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+      msgEl.textContent = '✓ Message sent successfully! I will reply to you soon.';
       form.reset();
-      setTimeout(() => { msg.style.display = 'none'; }, 5000);
+      showToast('Message sent successfully!');
     } else {
-      const result = await response.json();
-      msg.textContent = '✗ ' + (result.errors?.[0]?.message || 'Something went wrong.');
-      msg.style.color = '#ff6b6b';
-      setTimeout(() => { msg.style.display = 'none'; }, 5000);
+      throw new Error('Server returned error status');
     }
-  } catch (error) {
-    console.error('Form submission error:', error);
-    msg.textContent = '✗ Network error. Please try again.';
-    msg.style.color = '#ff6b6b';
-    setTimeout(() => { msg.style.display = 'none'; }, 5000);
+  } catch (err) {
+    console.error('Contact form submission error:', err);
+    msgEl.style.background = 'rgba(239, 68, 68, 0.15)';
+    msgEl.style.color = '#f87171';
+    msgEl.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+    msgEl.textContent = '✕ Error sending message. Please email dilushanmehavannan@gmail.com directly.';
   } finally {
     submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Send Message ↗</span>';
   }
 }
-
-// ========================
-// AUTO-REFRESH GITHUB DATA
-// ========================
-// Refresh GitHub data every 5 minutes (300,000 ms)
-setInterval(() => {
-  console.log('🔄 Auto-refreshing GitHub data...');
-  loadGitHub();
-  loadActivity();
-}, 300000); // 5 minutes
-
-// ========================
-// INIT
-// ========================
-loadGitHub();
-
-// Stagger reveal animations
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.hero-greeting, .hero-name, .hero-tagline, .hero-cta, .hero-social').forEach((el, i) => {
-    el.style.animationDelay = `${i * 0.1}s`;
-  });
-});
