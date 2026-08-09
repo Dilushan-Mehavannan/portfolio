@@ -386,12 +386,15 @@ ul {
   align-items: center;
 }
 
-/* Hero Photo Wrap */
+/* Hero Photo Wrap 3D Perspective */
 .hero-photo-wrap {
   position: relative;
   width: 280px;
   height: 340px;
   margin: 0 auto;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
 }
 
 .hero-photo {
@@ -402,8 +405,14 @@ ul {
   border-radius: 24px;
   border: 2px solid var(--border-light);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-  transition: transform var(--transition-normal), filter var(--transition-normal);
+  transition: transform 0.2s ease-out, filter 0.3s ease;
   filter: contrast(105%) brightness(95%);
+  transform: translateZ(25px);
+  will-change: transform;
+}
+
+.hero-photo-wrap:hover .hero-photo {
+  filter: contrast(110%) brightness(105%);
 }
 
 .photo-glow-ring {
@@ -427,13 +436,15 @@ ul {
   border-radius: 28px;
   border: 1px dashed var(--border-accent);
   pointer-events: none;
+  transform: translateZ(15px);
+  transition: transform 0.2s ease-out;
 }
 
 .hero-status-badge {
   position: absolute;
   bottom: -16px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(45px);
   background: var(--bg-surface);
   border: 1px solid var(--border-accent);
   padding: 0.4rem 1rem;
@@ -446,6 +457,7 @@ ul {
   color: var(--text-white);
   white-space: nowrap;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease-out;
 }
 
 .status-ping {

@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCursor();
   initNavbar();
   initSpotlights();
+  init3DPhoto();
   initSkillsFilter();
   initProjectControls();
   
@@ -113,6 +114,47 @@ function initSpotlights() {
       card.style.setProperty('--mouse-x', `${x}px`);
       card.style.setProperty('--mouse-y', `${y}px`);
     });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   3B. INTERACTIVE 3D PERSPECTIVE TILT FOR HERO PHOTO
+   -------------------------------------------------------------------------- */
+function init3DPhoto() {
+  const photoWrap = document.getElementById('heroPhotoWrap');
+  if (!photoWrap) return;
+
+  const photo = photoWrap.querySelector('.hero-photo');
+  const borderRing = photoWrap.querySelector('.photo-border-ring');
+  const badge = photoWrap.querySelector('.hero-status-badge');
+
+  photoWrap.addEventListener('mousemove', (e) => {
+    const rect = photoWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = -((y - centerY) / centerY) * 16;
+    const rotateY = ((x - centerX) / centerX) * 16;
+
+    photoWrap.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+    if (photo) photo.style.transform = 'translateZ(35px)';
+    if (borderRing) borderRing.style.transform = 'translateZ(20px)';
+    if (badge) badge.style.transform = 'translateX(-50%) translateZ(60px)';
+  });
+
+  photoWrap.addEventListener('mouseleave', () => {
+    photoWrap.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+    photoWrap.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    if (photo) photo.style.transform = 'translateZ(25px)';
+    if (borderRing) borderRing.style.transform = 'translateZ(15px)';
+    if (badge) badge.style.transform = 'translateX(-50%) translateZ(45px)';
+
+    setTimeout(() => {
+      photoWrap.style.transition = 'transform 0.1s ease-out';
+    }, 400);
   });
 }
 
