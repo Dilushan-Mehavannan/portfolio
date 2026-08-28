@@ -5,232 +5,311 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- SEO & Social Meta Tags -->
-  <title>Mehavannan Dilushan | Full-Stack Developer & Electronics Engineer</title>
-  <meta name="description" content="Portfolio of Mehavannan Dilushan - IT Undergraduate, Full-Stack Developer, and Physics & Electronics Specialist based in Sri Lanka. Explore projects in Web, IoT, Embedded Systems, and Databases." />
-  <meta name="keywords" content="Mehavannan Dilushan, Dilushan Mehavannan, Portfolio, Full Stack Developer, Electronics Engineer, IoT, Sri Lanka, Moratuwa BIT, Eastern University" />
+  <title>Mehavannan Dilushan | Full-Stack Developer &amp; Electronics Engineer</title>
+  <meta name="description" content="Portfolio of Mehavannan Dilushan — Skilled in Python, MERN Web Development, Databases, IoT, Robotics, and PCB Design. Developer of Avanti Chiswick live restaurant platform and Idea Ignition 2026 finalist." />
+  <meta name="keywords" content="Mehavannan Dilushan, Dilushan Mehavannan, Portfolio, Web Developer, MERN Stack, Python, Electronics Engineer, Sri Lanka, Avanti Chiswick, Sabaragamuwa University, Sabaragamuwa, Trincomalee Campus, Moratuwa BIT" />
   <meta name="author" content="Mehavannan Dilushan" />
   
+  <!-- Favicon SVG Data URI -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23081026'/><rect x='20' y='20' width='60' height='60' rx='10' fill='none' stroke='%23e5a93c' stroke-width='6'/><circle cx='50' cy='50' r='14' fill='%2300f0ff'/></svg>" />
+
   <!-- Open Graph / Facebook / LinkedIn -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Mehavannan Dilushan | Portfolio" />
-  <meta property="og:description" content="Full-Stack Developer & Physics/Electronics Specialist combining web software, embedded IoT hardware, and relational database systems." />
+  <meta property="og:title" content="Mehavannan Dilushan | Portfolio Website" />
+  <meta property="og:description" content="Portfolio of Mehavannan Dilushan — Skilled in Python, MERN Web Development, Databases, IoT, Robotics, and PCB Design." />
   <meta property="og:image" content="photo.jpg" />
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=Orbitron:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   
+  <!-- External 3D & Animation Libraries (Three.js & GSAP) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="pcb-substrate-theme">
 
-  <!-- Noise Overlay -->
-  <div class="noise"></div>
+  <!-- FIXED FULL-VIEWPORT 3D VIDEOGRAPHY CANVAS -->
+  <div class="pcb-3d-videography-viewport">
+    <canvas id="pcb3d-canvas"></canvas>
+    
+    <!-- Camera HUD Overlays -->
+    <div class="videography-hud">
+      <div class="hud-top-bar">
+        <div class="hud-rec"><span class="rec-dot"></span>REC [4K 60FPS]</div>
+        <div class="hud-cam-id">CAM-01 // 3D MOTHERBOARD VIEW</div>
+        <div class="hud-lens">F/1.8 35MM &bull; ISO 400</div>
+      </div>
 
-  <!-- Ambient Backdrop Glows -->
-  <div class="glow-bg glow-bg-1"></div>
-  <div class="glow-bg glow-bg-2"></div>
+      <!-- Viewfinder Crosshairs -->
+      <div class="hud-crosshair top-left"></div>
+      <div class="hud-crosshair top-right"></div>
+      <div class="hud-crosshair bottom-left"></div>
+      <div class="hud-crosshair bottom-right"></div>
 
-  <!-- Custom Cursor -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-follower" id="cursorFollower"></div>
+      <div class="hud-bottom-bar">
+        <div class="hud-coords" id="camCoords">POS: X: 0.0 Y: 35.0 Z: 45.0</div>
+        <div class="hud-bus-freq">CLK: 160.00 MHz &bull; BUS: 3.3V</div>
+      </div>
+    </div>
 
-  <!-- Floating Toast Notification -->
-  <div class="toast" id="toast">Copied to clipboard!</div>
+    <!-- Cinematic Vignette Filter -->
+    <div class="cinematic-vignette"></div>
+  </div>
 
-  <!-- Navigation -->
-  <nav id="navbar">
-    <a href="#" class="nav-logo">
-      <span class="logo-text">MD</span><span class="dot">.</span>
-      <span class="logo-tag">DEV &bull; IOT</span>
+  <!-- Electrical Spark Canvas Overlay -->
+  <canvas id="spark-canvas" class="spark-canvas-layer"></canvas>
+
+  <!-- Noise Overlay for Silk-Screen Texture -->
+  <div class="pcb-noise-layer"></div>
+
+  <!-- Custom Circuit Precision Cursor -->
+  <div class="pcb-cursor" id="cursor"><span class="crosshair-dot"></span></div>
+  <div class="pcb-cursor-follower" id="cursorFollower"><div class="pin-ring"></div></div>
+
+  <!-- System Toast / Terminal Alert -->
+  <div class="toast pcb-terminal-toast" id="toast">
+    <span class="toast-led"></span>
+    <span id="toastMsg">SYSTEM OK</span>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav id="navbar" class="pcb-navbar">
+    <a href="#" class="nav-logo pcb-logo">
+      <div class="logo-chip-icon">
+        <span class="chip-notch"></span>
+        <span class="chip-code">MD</span>
+      </div>
+      <div class="logo-text-wrap">
+        <span class="logo-text">DILUSHAN</span><span class="logo-dot">.DEV</span>
+        <span class="logo-tag">PORTFOLIO v3.0</span>
+      </div>
     </a>
+
+    <!-- System Telemetry Status Bar -->
+    <div class="nav-telemetry">
+      <div class="tele-item">
+        <span class="tele-label">SYSTEM:</span>
+        <span class="tele-val neon-cyan">ONLINE</span>
+      </div>
+      <div class="tele-divider"></div>
+      <div class="tele-item">
+        <span class="tele-label">SPEED:</span>
+        <span class="tele-val neon-gold">160MHz</span>
+      </div>
+      <div class="tele-divider"></div>
+      <div class="tele-item">
+        <span class="tele-label">STATUS:</span>
+        <span class="tele-status"><span class="led-blink green"></span>READY TO HIRE</span>
+      </div>
+    </div>
     
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#expertise">Expertise</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#achievements">Achievements</a></li>
-      <li><a href="#education">Education</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about" class="pcb-nav-link" data-circuit-target="about"><span class="nav-num">01.</span>ABOUT</a></li>
+      <li><a href="#expertise" class="pcb-nav-link" data-circuit-target="expertise"><span class="nav-num">02.</span>EXPERTISE</a></li>
+      <li><a href="#skills" class="pcb-nav-link" data-circuit-target="skills"><span class="nav-num">03.</span>SKILLS</a></li>
+      <li><a href="#projects" class="pcb-nav-link" data-circuit-target="projects"><span class="nav-num">04.</span>PROJECTS</a></li>
+      <li><a href="#achievements" class="pcb-nav-link" data-circuit-target="achievements"><span class="nav-num">05.</span>ACHIEVEMENTS</a></li>
+      <li><a href="#education" class="pcb-nav-link" data-circuit-target="education"><span class="nav-num">06.</span>EDUCATION</a></li>
+      <li><a href="#contact" class="pcb-nav-link" data-circuit-target="contact"><span class="nav-num">07.</span>CONTACT</a></li>
     </ul>
 
     <div class="nav-actions">
-      <a href="#contact" class="btn btn-sm btn-outline">Hire Me</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <a href="#contact" class="btn btn-pcb-primary btn-sm">
+        <span class="btn-led"></span>
+        <span>GET IN TOUCH</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation Menu">
         <span></span><span></span><span></span>
       </button>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section id="hero">
-    <div class="hero-container">
+  <!-- HERO SECTION -->
+  <section id="hero" class="pcb-section hero-pcb-section">
+    <div class="hero-container container">
       
-      <div class="hero-photo-column">
-        <div class="hero-photo-wrap" id="heroPhotoWrap">
-          <div class="photo-glow-ring"></div>
-          <div class="photo-border-ring"></div>
-          <img src="photo.jpg" alt="Mehavannan Dilushan" class="hero-photo" />
-          <div class="hero-status-badge">
-            <span class="status-ping"></span>
-            <span>Open for Software &amp; IoT Roles</span>
+      <!-- Title & Intro Content -->
+      <div class="hero-text-column">
+        <div class="hero-badge-wrap">
+          <div class="hero-badge pcb-tag">
+            <span class="badge-icon">⚡</span>
+            <span class="pcb-mono-code">SOFTWARE DEVELOPER &amp; ELECTRONICS ENGINEER</span>
+          </div>
+
+          <div class="hero-status-badge-inline">
+            <span class="status-led-pulse"></span>
+            <span class="badge-text">STATUS: AVAILABLE FOR ENTRY-LEVEL ROLES</span>
           </div>
         </div>
-      </div>
 
-      <div class="hero-text-column">
-        <div class="hero-badge">
-          <span class="badge-icon">⚡</span>
-          <span>Full-Stack Developer &bull; Electronics Specialist</span>
-        </div>
-
-        <h1 class="hero-title">
-          Hi, I'm <br />
-          <span class="gradient-text">Mehavannan Dilushan</span>
+        <h1 class="hero-title pcb-glitch-title">
+          <span class="power-source-label">HELLO, I'M</span><br />
+          <span class="gradient-gold-text" id="heroNameText">Mehavannan Dilushan</span>
         </h1>
 
-        <p class="hero-description">
-          Dual-degree undergraduate combining <strong>Software Engineering</strong>, <strong>Embedded IoT Systems</strong>, and <strong>Applied Electronics</strong>. Building high-performance web applications and hardware-integrated software solutions.
+        <p class="hero-description pcb-desc">
+          I'm a fresher skilled in <strong>Python, web development (MERN), and databases</strong>, with hands-on project experience building a portfolio site and a live restaurant website. Also experienced in <strong>robotics, IoT, and PCB designing</strong> through hands-on competitions and coursework, including a <strong>1st runner-up finish in a robotics competition</strong> and a <strong>semi-final finish at SLIOT</strong>. Recently represented my university at a national pitching competition with a sustainability-focused project. Adaptable and eager to learn, looking for an entry-level role to grow my technical skills and contribute to a team.
         </p>
 
-        <div class="hero-pills">
-          <span class="hero-pill">💻 Full-Stack Dev</span>
-          <span class="hero-pill">🔬 Physics &amp; Electronics</span>
-          <span class="hero-pill">🔌 IoT &amp; Microcontrollers</span>
-          <span class="hero-pill">🗄️ Relational DBs</span>
+        <div class="hero-pills pcb-pill-cluster">
+          <div class="pcb-pill"><span class="pill-dot green"></span>WEB DEVELOPMENT (MERN)</div>
+          <div class="pcb-pill"><span class="pill-dot cyan"></span>PYTHON &amp; DATABASES</div>
+          <div class="pcb-pill"><span class="pill-dot gold"></span>ROBOTICS &amp; IOT</div>
+          <div class="pcb-pill"><span class="pill-dot purple"></span>PCB CIRCUIT DESIGN</div>
         </div>
 
         <div class="hero-cta-group">
-          <a href="#projects" class="btn btn-primary">
-            <span>Explore Projects</span>
+          <a href="#projects" class="btn btn-pcb-primary btn-lg">
+            <span class="btn-glow-pulse"></span>
+            <span>VIEW MY PROJECTS</span>
             <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="#contact" class="btn btn-secondary">
-            <span>Get In Touch</span>
+          <a href="#contact" class="btn btn-pcb-secondary btn-lg">
+            <span>GET IN TOUCH</span>
           </a>
-          <button class="btn btn-ghost" id="copyEmailBtn" onclick="copyEmail('dilushanmehavannan@gmail.com')">
+          <button class="btn btn-pcb-ghost" id="copyEmailBtn" onclick="copyEmail('dilushanmehavannan@gmail.com')">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            <span>Copy Email</span>
+            <span>COPY EMAIL</span>
           </button>
         </div>
 
         <div class="hero-social-row">
-          <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="social-icon-btn" title="GitHub">
+          <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="pcb-social-btn" title="GitHub Profile">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-1.93c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.57.23 2.73.11 3.02.74.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
+            <span class="social-pin-tag">GITHUB</span>
           </a>
-          <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" rel="noopener" class="social-icon-btn" title="LinkedIn">
+          <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" rel="noopener" class="pcb-social-btn" title="LinkedIn Profile">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zm1.78 13.02H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            <span class="social-pin-tag">LINKEDIN</span>
           </a>
-          <a href="mailto:dilushanmehavannan@gmail.com" class="social-icon-btn" title="Email">
+          <a href="mailto:dilushanmehavannan@gmail.com" class="pcb-social-btn" title="Email Direct">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span class="social-pin-tag">EMAIL</span>
           </a>
-          <a href="tel:+94712875703" class="social-icon-btn" title="Phone Call">
+          <a href="tel:+94712875703" class="pcb-social-btn" title="Phone Call">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            <span class="social-pin-tag">PHONE</span>
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Quick Stats Bar -->
-    <div class="hero-stats-bar container">
-      <div class="stat-box">
-        <div class="stat-value" id="repoCounter">--</div>
-        <div class="stat-title">Public Repositories</div>
+    <!-- Highlights Metrics Bar -->
+    <div class="pcb-telemetry-bar container">
+      <div class="telemetry-chip">
+        <div class="chip-value">AVANTI.UK</div>
+        <div class="chip-label">LIVE RESTAURANT SITE</div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat-box">
-        <div class="stat-value">2</div>
-        <div class="stat-title">Degrees Pursuing</div>
+      <div class="telemetry-bus-line"></div>
+      <div class="telemetry-chip">
+        <div class="chip-value">2 DUAL</div>
+        <div class="chip-label">DEGREES PURSUING</div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat-box">
-        <div class="stat-value">1st</div>
-        <div class="stat-title">Robotics Runner Up</div>
+      <div class="telemetry-bus-line"></div>
+      <div class="telemetry-chip">
+        <div class="chip-value">FINALIST</div>
+        <div class="chip-label">IDEA IGNITION 2026</div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat-box">
-        <div class="stat-value">2026</div>
-        <div class="stat-title">SLIOT Semi-Finalist</div>
+      <div class="telemetry-bus-line"></div>
+      <div class="telemetry-chip">
+        <div class="chip-value">1st RUNNER UP</div>
+        <div class="chip-label">ROBOTICS COMP 2025</div>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section id="about" class="section">
+  <!-- SECTION 01: ABOUT ME -->
+  <section id="about" class="pcb-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">01 &bull; Biography</span>
-        <h2 class="section-title">About Me</h2>
+      <div class="pcb-section-header" data-power-target="about">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-about"></span>
+          <span class="bus-address">SECTION // 01</span>
+        </div>
+        <span class="pcb-section-tag">01 &bull; ABOUT ME</span>
+        <h2 class="pcb-section-title">Personal Biography</h2>
       </div>
 
       <div class="about-grid">
-        <div class="about-main-card">
+        <div class="pcb-card about-main-card">
+          <div class="card-header-bar">
+            <span class="card-part-label">SOFTWARE &amp; HARDWARE BACKGROUND</span>
+            <span class="solder-dot"></span>
+          </div>
+
           <p class="about-lead">
-            I am a versatile technology enthusiast bridging the worlds of software development and hardware engineering.
+            Passionate tech enthusiast bridging full-stack software development with hands-on electronics &amp; robotics engineering.
           </p>
           <p>
             Currently pursuing a <strong>BSc in Applied Physics &amp; Electronics</strong> at Eastern University of Sri Lanka alongside a <strong>Bachelor of Information Technology (BIT)</strong> at the University of Moratuwa.
           </p>
           <p>
-            My unique academic background enables me to write clean full-stack web code while understanding low-level hardware communication, microcontroller logic, PCB design, and network protocols.
+            My background allows me to build modern web applications (like Avanti Chiswick) while possessing practical knowledge in microcontroller logic, EasyEDA PCB layout, sensor integration, and system automation.
           </p>
 
           <div class="about-meta-grid">
-            <div class="meta-item">
+            <div class="meta-item pcb-meta-box">
               <span class="meta-icon">📍</span>
               <div>
-                <span class="meta-label">Location</span>
+                <span class="meta-label">LOCATION</span>
                 <span class="meta-val">Trincomalee, Sri Lanka</span>
               </div>
             </div>
-            <div class="meta-item">
+            <div class="meta-item pcb-meta-box">
               <span class="meta-icon">🎓</span>
               <div>
-                <span class="meta-label">Education</span>
-                <span class="meta-val">BSc (Physics &amp; Electronics) + BIT (Uni of Moratuwa)</span>
+                <span class="meta-label">EDUCATION</span>
+                <span class="meta-val">BSc Physics &amp; Electronics + BIT Moratuwa</span>
               </div>
             </div>
-            <div class="meta-item">
+            <div class="meta-item pcb-meta-box">
               <span class="meta-icon">✉️</span>
               <div>
-                <span class="meta-label">Email</span>
+                <span class="meta-label">EMAIL ADDRESS</span>
                 <a href="mailto:dilushanmehavannan@gmail.com" class="meta-val link">dilushanmehavannan@gmail.com</a>
               </div>
             </div>
-            <div class="meta-item">
+            <div class="meta-item pcb-meta-box">
               <span class="meta-icon">🌐</span>
               <div>
-                <span class="meta-label">Languages</span>
+                <span class="meta-label">LANGUAGES SPOKEN</span>
                 <span class="meta-val">Tamil (Native), English (Intermediate)</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="about-side-card">
-          <h3 class="side-card-title">What I Drive For</h3>
+        <div class="pcb-card about-side-card">
+          <div class="card-header-bar">
+            <span class="card-part-label">KEY HIGHLIGHTS &amp; DRIVE</span>
+            <span class="solder-dot"></span>
+          </div>
+
           <ul class="drive-list">
-            <li>
-              <span class="drive-icon">💡</span>
+            <li class="drive-item">
+              <div class="drive-icon-chip">💻</div>
               <div>
-                <strong>Problem Solving</strong>
-                <p>Solving complex logic challenges across web backends and microcontrollers.</p>
+                <strong>Web Development (MERN)</strong>
+                <p>Developing responsive web applications with interactive user interfaces and robust database integrations.</p>
               </div>
             </li>
-            <li>
-              <span class="drive-icon">🔧</span>
+            <li class="drive-item">
+              <div class="drive-icon-chip">🌿</div>
               <div>
-                <strong>Hardware Integration</strong>
-                <p>Connecting IoT sensors, PCB hardware, and wireless protocols to web dashboards.</p>
+                <strong>Sustainable Tech Innovation</strong>
+                <p>Finalist at Idea Ignition 2026 pitching bioplastics engineered from organic fish scale waste.</p>
               </div>
             </li>
-            <li>
-              <span class="drive-icon">⚡</span>
+            <li class="drive-item">
+              <div class="drive-icon-chip">🤖</div>
               <div>
-                <strong>Continuous Learning</strong>
-                <p>Staying ahead in full-stack frameworks, cloud tech, and electronic innovation.</p>
+                <strong>Robotics &amp; IoT</strong>
+                <p>Building autonomous robots, PCB designs, and sensor monitoring systems through competitions and coursework.</p>
               </div>
             </li>
           </ul>
@@ -239,146 +318,184 @@
     </div>
   </section>
 
-  <!-- Expertise Pillars Section -->
-  <section id="expertise" class="section">
+  <!-- SECTION 02: TECHNICAL EXPERTISE -->
+  <section id="expertise" class="pcb-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">02 &bull; Core Competencies</span>
-        <h2 class="section-title">Technical Expertise</h2>
+      <div class="pcb-section-header" data-power-target="expertise">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-expertise"></span>
+          <span class="bus-address">SECTION // 02</span>
+        </div>
+        <span class="pcb-section-tag">02 &bull; TECHNICAL EXPERTISE</span>
+        <h2 class="pcb-section-title">Core Competencies</h2>
       </div>
 
       <div class="expertise-grid">
-        <div class="expertise-card spotlight">
+        <div class="pcb-card expertise-card spotlight-chip">
+          <div class="chip-notch"></div>
           <div class="card-icon-wrap">💻</div>
-          <h3>Full-Stack Web Development</h3>
-          <p>Building responsive, dynamic web applications with clean modern JavaScript, React, Node.js, Express, PHP, and Python backends.</p>
-          <div class="pill-group">
-            <span class="mini-pill">React</span>
-            <span class="mini-pill">Node.js</span>
-            <span class="mini-pill">JavaScript</span>
-            <span class="mini-pill">PHP</span>
-            <span class="mini-pill">Python</span>
+          <h3>Web Development &amp; MERN</h3>
+          <p>Building responsive web applications with HTML, CSS, JavaScript, React, Node.js, PHP, and Python backends.</p>
+          <div class="pcb-pill-group">
+            <span class="mini-chip-pill">React</span>
+            <span class="mini-chip-pill">Node.js</span>
+            <span class="mini-chip-pill">JavaScript</span>
+            <span class="mini-chip-pill">PHP</span>
+            <span class="mini-chip-pill">Python</span>
           </div>
         </div>
 
-        <div class="expertise-card spotlight">
+        <div class="pcb-card expertise-card spotlight-chip">
+          <div class="chip-notch"></div>
           <div class="card-icon-wrap">🔌</div>
-          <h3>Embedded Systems &amp; IoT</h3>
-          <p>Designing microcontroller logic with C/C++, Arduino, sensors, EasyEDA PCB layout, and IoT communication protocols.</p>
-          <div class="pill-group">
-            <span class="mini-pill">Arduino</span>
-            <span class="mini-pill">C / C++</span>
-            <span class="mini-pill">PCB Design</span>
-            <span class="mini-pill">Sensors</span>
-            <span class="mini-pill">IoT Systems</span>
+          <h3>Robotics, IoT &amp; PCB Design</h3>
+          <p>Programming microcontrollers in C/C++, designing circuit layouts in EasyEDA, sensor integration, and autonomous robotics logic.</p>
+          <div class="pcb-pill-group">
+            <span class="mini-chip-pill">Arduino</span>
+            <span class="mini-chip-pill">C / C++</span>
+            <span class="mini-chip-pill">EasyEDA PCB</span>
+            <span class="mini-chip-pill">Sensors</span>
+            <span class="mini-chip-pill">Robotics</span>
           </div>
         </div>
 
-        <div class="expertise-card spotlight">
+        <div class="pcb-card expertise-card spotlight-chip">
+          <div class="chip-notch"></div>
           <div class="card-icon-wrap">🗄️</div>
-          <h3>Database Architecture</h3>
-          <p>Designing structured relational database schemas, optimizing complex queries, and managing MySQL &amp; MS SQL Server databases.</p>
-          <div class="pill-group">
-            <span class="mini-pill">MySQL</span>
-            <span class="mini-pill">MS SQL</span>
-            <span class="mini-pill">Schema Design</span>
-            <span class="mini-pill">CRUD APIs</span>
+          <h3>Databases &amp; Architecture</h3>
+          <p>Designing structured relational database schemas, writing optimized queries, stored procedures, MySQL, and MS SQL Server engines.</p>
+          <div class="pcb-pill-group">
+            <span class="mini-chip-pill">MySQL</span>
+            <span class="mini-chip-pill">MS SQL</span>
+            <span class="mini-chip-pill">Relational Schemas</span>
+            <span class="mini-chip-pill">REST APIs</span>
           </div>
         </div>
 
-        <div class="expertise-card spotlight">
+        <div class="pcb-card expertise-card spotlight-chip">
+          <div class="chip-notch"></div>
           <div class="card-icon-wrap">📡</div>
-          <h3>Networking &amp; System Tools</h3>
-          <p>Analyzing network packets with Wireshark, configuring system tools, managing Git/GitHub repos, and hardware diagnostics.</p>
-          <div class="pill-group">
-            <span class="mini-pill">Wireshark</span>
-            <span class="mini-pill">Git / GitHub</span>
-            <span class="mini-pill">Networking</span>
-            <span class="mini-pill">VS Code</span>
+          <h3>Tools &amp; Technical Analysis</h3>
+          <p>Version control with Git/GitHub, packet inspection with Wireshark, network configuration, VS Code, and hardware troubleshooting.</p>
+          <div class="pcb-pill-group">
+            <span class="mini-chip-pill">Wireshark</span>
+            <span class="mini-chip-pill">Git / GitHub</span>
+            <span class="mini-chip-pill">TCP/IP</span>
+            <span class="mini-chip-pill">VS Code</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Skills Section -->
-  <section id="skills" class="section">
+  <!-- SECTION 03: SKILLS -->
+  <section id="skills" class="pcb-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">03 &bull; Tech Stack</span>
-        <h2 class="section-title">Skills &amp; Technologies</h2>
+      <div class="pcb-section-header" data-power-target="skills">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-skills"></span>
+          <span class="bus-address">SECTION // 03</span>
+        </div>
+        <span class="pcb-section-tag">03 &bull; SKILLS &amp; TECHNOLOGIES</span>
+        <h2 class="pcb-section-title">Technical Skillset</h2>
       </div>
 
-      <!-- Category Filter Tabs -->
+      <!-- Skill Search Input Bar & Category Filters -->
+      <div class="skills-search-wrapper">
+        <div class="pcb-search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="skillSearchInput" placeholder="Search any skill or technology (e.g. Python, React, C++, Arduino, MySQL, Git)..." autocomplete="off" />
+          <button class="clear-search-btn" id="clearSkillSearch" style="display:none;" title="Clear search">✕</button>
+        </div>
+        <div class="search-results-counter" id="searchResultsCounter">SHOWING ALL 25 SKILLS &amp; TECHNOLOGIES</div>
+      </div>
+
+      <!-- Filter Controls -->
       <div class="skills-filter-bar" id="skillsFilterBar">
-        <button class="skills-filter-btn active" data-skill-filter="all">All Skills</button>
-        <button class="skills-filter-btn" data-skill-filter="languages">Languages</button>
-        <button class="skills-filter-btn" data-skill-filter="hardware">Hardware &amp; IoT</button>
-        <button class="skills-filter-btn" data-skill-filter="databases">Databases</button>
-        <button class="skills-filter-btn" data-skill-filter="tools">Tools &amp; Network</button>
-        <button class="skills-filter-btn" data-skill-filter="soft">Soft Skills</button>
+        <button class="skills-filter-btn active" data-skill-filter="all"><span class="filter-led"></span>ALL SKILLS</button>
+        <button class="skills-filter-btn" data-skill-filter="languages"><span class="filter-led"></span>LANGUAGES</button>
+        <button class="skills-filter-btn" data-skill-filter="hardware"><span class="filter-led"></span>HARDWARE &amp; IOT</button>
+        <button class="skills-filter-btn" data-skill-filter="databases"><span class="filter-led"></span>DATABASES</button>
+        <button class="skills-filter-btn" data-skill-filter="tools"><span class="filter-led"></span>TOOLS &amp; NETWORKING</button>
+        <button class="skills-filter-btn" data-skill-filter="soft"><span class="filter-led"></span>PROFESSIONAL SKILLS</button>
       </div>
 
+      <!-- Skill Categories -->
       <div class="skills-grid-container" id="skillsContainer">
         
         <!-- Category: Languages -->
-        <div class="skill-category-box" data-category="languages">
-          <h3 class="category-title">Programming Languages</h3>
+        <div class="pcb-card skill-category-box" data-category="languages">
+          <div class="chip-category-header">
+            <span class="chip-id">CATEGORY 01</span>
+            <h3 class="category-title">PROGRAMMING LANGUAGES</h3>
+          </div>
           <div class="skill-item-list">
-            <div class="skill-badge"><span class="skill-dot" style="background:#f1e05a;"></span>JavaScript</div>
-            <div class="skill-badge"><span class="skill-dot" style="background:#3572A5;"></span>Python</div>
-            <div class="skill-badge"><span class="skill-dot" style="background:#f34b7d;"></span>C++</div>
-            <div class="skill-badge"><span class="skill-dot" style="background:#178600;"></span>C# (.NET)</div>
-            <div class="skill-badge"><span class="skill-dot" style="background:#4F5D95;"></span>PHP</div>
-            <div class="skill-badge"><span class="skill-dot" style="background:#e34c26;"></span>HTML5</div>
-            <div class="skill-badge"><span class="skill-dot" style="background:#563d7c;"></span>CSS3</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="js"><span class="chip-pins"></span><span class="skill-dot" style="background:#f1e05a;"></span>JavaScript (ES6+)</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="py"><span class="chip-pins"></span><span class="skill-dot" style="background:#3572A5;"></span>Python</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="cpp"><span class="chip-pins"></span><span class="skill-dot" style="background:#f34b7d;"></span>C / C++</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="cs"><span class="chip-pins"></span><span class="skill-dot" style="background:#178600;"></span>C# (.NET)</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="php"><span class="chip-pins"></span><span class="skill-dot" style="background:#4F5D95;"></span>PHP</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="html"><span class="chip-pins"></span><span class="skill-dot" style="background:#e34c26;"></span>HTML5</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="css"><span class="chip-pins"></span><span class="skill-dot" style="background:#563d7c;"></span>CSS3</div>
           </div>
         </div>
 
         <!-- Category: Hardware & IoT -->
-        <div class="skill-category-box" data-category="hardware">
-          <h3 class="category-title">Hardware &amp; Electronics</h3>
+        <div class="pcb-card skill-category-box" data-category="hardware">
+          <div class="chip-category-header">
+            <span class="chip-id">CATEGORY 02</span>
+            <h3 class="category-title">HARDWARE, ROBOTICS &amp; IOT</h3>
+          </div>
           <div class="skill-item-list">
-            <div class="skill-badge">Arduino Microcontrollers</div>
-            <div class="skill-badge">EasyEDA PCB Design</div>
-            <div class="skill-badge">PCB Circuit Fabrication</div>
-            <div class="skill-badge">Embedded Systems</div>
-            <div class="skill-badge">Sensor &amp; Actuator Modules</div>
-            <div class="skill-badge">Applied Electronics Lab</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="arduino"><span class="chip-pins"></span>Arduino Microcontrollers</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="easyeda"><span class="chip-pins"></span>EasyEDA PCB Design</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="pcbfab"><span class="chip-pins"></span>PCB Circuit Fabrication</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="embedded"><span class="chip-pins"></span>Robotics Motor Controls</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="sensors"><span class="chip-pins"></span>Sensor Interfacing</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="physicslab"><span class="chip-pins"></span>Applied Physics Instrumentation</div>
           </div>
         </div>
 
         <!-- Category: Databases -->
-        <div class="skill-category-box" data-category="databases">
-          <h3 class="category-title">Databases &amp; Systems</h3>
+        <div class="pcb-card skill-category-box" data-category="databases">
+          <div class="chip-category-header">
+            <span class="chip-id">CATEGORY 03</span>
+            <h3 class="category-title">DATABASES &amp; APIS</h3>
+          </div>
           <div class="skill-item-list">
-            <div class="skill-badge">MySQL</div>
-            <div class="skill-badge">Microsoft SQL Server</div>
-            <div class="skill-badge">Relational Database Modeling</div>
-            <div class="skill-badge">REST API Integration</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="mysql"><span class="chip-pins"></span>MySQL</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="mssql"><span class="chip-pins"></span>Microsoft SQL Server</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="relational"><span class="chip-pins"></span>Relational Modeling</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="restapi"><span class="chip-pins"></span>REST API Integration</div>
           </div>
         </div>
 
         <!-- Category: Tools & Network -->
-        <div class="skill-category-box" data-category="tools">
-          <h3 class="category-title">Tools &amp; Networking</h3>
+        <div class="pcb-card skill-category-box" data-category="tools">
+          <div class="chip-category-header">
+            <span class="chip-id">CATEGORY 04</span>
+            <h3 class="category-title">TOOLS &amp; NETWORKING</h3>
+          </div>
           <div class="skill-item-list">
-            <div class="skill-badge">Git &amp; GitHub Version Control</div>
-            <div class="skill-badge">Wireshark Packet Analyzer</div>
-            <div class="skill-badge">VS Code</div>
-            <div class="skill-badge">Microsoft Office Suite</div>
-            <div class="skill-badge">Network Diagnostics &amp; TCP/IP</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="git"><span class="chip-pins"></span>Git &amp; GitHub</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="wireshark"><span class="chip-pins"></span>Wireshark Packet Inspection</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="vscode"><span class="chip-pins"></span>VS Code IDE</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="office"><span class="chip-pins"></span>MS Office Suite</div>
+            <div class="pcb-chip-badge 3d-chip-node" data-skill-id="tcpip"><span class="chip-pins"></span>TCP/IP &amp; Networking Fundamentals</div>
           </div>
         </div>
 
         <!-- Category: Soft Skills -->
-        <div class="skill-category-box" data-category="soft">
-          <h3 class="category-title">Professional Soft Skills</h3>
+        <div class="pcb-card skill-category-box" data-category="soft">
+          <div class="chip-category-header">
+            <span class="chip-id">CATEGORY 05</span>
+            <h3 class="category-title">PROFESSIONAL SKILLS</h3>
+          </div>
           <div class="skill-item-list">
-            <div class="skill-badge">Analytical Problem Solving</div>
-            <div class="skill-badge">Technical Communication</div>
-            <div class="skill-badge">Adaptability &amp; Rapid Learning</div>
-            <div class="skill-badge">Collaborative Team Work</div>
+            <div class="pcb-chip-badge 3d-chip-node"><span class="chip-pins"></span>Problem Solving</div>
+            <div class="pcb-chip-badge 3d-chip-node"><span class="chip-pins"></span>Teamwork &amp; Adaptability</div>
+            <div class="pcb-chip-badge 3d-chip-node"><span class="chip-pins"></span>Fast Learner</div>
+            <div class="pcb-chip-badge 3d-chip-node"><span class="chip-pins"></span>Technical Presentation</div>
           </div>
         </div>
 
@@ -386,173 +503,268 @@
     </div>
   </section>
 
-  <!-- Projects Section (GitHub Integration) -->
-  <section id="projects" class="section">
+  <!-- SECTION 04: PROJECTS -->
+  <section id="projects" class="pcb-section">
     <div class="container">
-      <div class="section-header flex-header">
-        <div>
-          <span class="section-tag">04 &bull; Open Source &amp; Code</span>
-          <h2 class="section-title">GitHub Projects</h2>
+      <div class="pcb-section-header" data-power-target="projects">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-projects"></span>
+          <span class="bus-address">SECTION // 04</span>
         </div>
-        <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="btn btn-sm btn-outline">
-          <span>View GitHub Profile ↗</span>
-        </a>
+        <span class="pcb-section-tag">04 &bull; FEATURED PROJECTS</span>
+        <h2 class="pcb-section-title">Featured Projects</h2>
       </div>
 
-      <!-- GitHub User Overview Card -->
-      <div class="gh-profile-card" id="ghProfileCard">
-        <div class="gh-avatar-wrap">
-          <img id="ghAvatar" src="photo.jpg" alt="GitHub Avatar" class="gh-avatar" />
-        </div>
-        <div class="gh-info-content">
-          <div class="gh-user-head">
-            <h3 id="ghName">Mehavannan Dilushan</h3>
-            <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="gh-handle">@Dilushan-Mehavannan</a>
+      <!-- Featured Projects Grid -->
+      <div class="featured-projects-grid">
+        
+        <!-- PROJECT 1: AVANTI CHISWICK -->
+        <div class="pcb-card featured-project-card 3d-lift-card spotlight-chip">
+          <div class="card-header-bar">
+            <span class="card-part-label">FEATURED WEB APPLICATION // LIVE SITE</span>
+            <span class="solder-dot"></span>
           </div>
-          <p id="ghBio" class="gh-bio-text">IT Student &bull; Physics &amp; Electronics &bull; Full-Stack &amp; IoT Enthusiast</p>
-          <div class="gh-stats-row">
-            <div class="gh-stat-item">
-              <strong id="ghRepos">—</strong>
-              <span>Public Repos</span>
+
+          <div class="project-content-body">
+            <div class="project-info">
+              <span class="project-category-tag neon-gold">LIVE RESTAURANT WEB APP</span>
+              <h3 class="featured-title">Avanti Chiswick — Restaurant &amp; Dining Platform</h3>
+              <p class="featured-desc">
+                High-end web application developed for <strong>Avanti Chiswick</strong> (UK). Features a modern responsive UI, reservation and menu showcase, embedded Google Maps integration, and fast page load speeds.
+              </p>
+
+              <div class="pcb-pill-group margin-bottom">
+                <span class="mini-chip-pill">React</span>
+                <span class="mini-chip-pill">Node.js</span>
+                <span class="mini-chip-pill">JavaScript ES6+</span>
+                <span class="mini-chip-pill">Firebase</span>
+                <span class="mini-chip-pill">CSS3</span>
+              </div>
+
+              <div class="project-btn-row">
+                <a href="https://avanthi.uk/" target="_blank" rel="noopener" class="btn btn-pcb-primary btn-sm">
+                  <span>VISIT LIVE SITE (AVANTHI.UK) ↗</span>
+                </a>
+              </div>
             </div>
-            <div class="gh-stat-item">
-              <strong id="ghFollowers">—</strong>
-              <span>Followers</span>
-            </div>
-            <div class="gh-stat-item">
-              <strong id="ghFollowing">—</strong>
-              <span>Following</span>
+
+            <!-- Website Preview Frame -->
+            <div class="website-preview-frame">
+              <div class="browser-top-bar">
+                <span class="b-dot red"></span><span class="b-dot yellow"></span><span class="b-dot green"></span>
+                <span class="b-url">https://avanthi.uk/</span>
+              </div>
+              <div class="preview-iframe-placeholder">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&auto=format&fit=crop&q=80" alt="Avanti Chiswick Preview" class="preview-img" />
+                <div class="preview-overlay-btn">
+                  <a href="https://avanthi.uk/" target="_blank" rel="noopener" class="btn btn-pcb-outline btn-sm">VISIT AVANTHI.UK ↗</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Filter Controls & Search Bar -->
-      <div class="projects-controls-bar">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="projectSearch" placeholder="Search repositories by name or tech..." />
+        <!-- PROJECT 2: IDEA IGNITION 2026 BIOPLASTICS FROM FISH SCALES -->
+        <div class="pcb-card featured-project-card 3d-lift-card spotlight-chip">
+          <div class="card-header-bar">
+            <span class="card-part-label">NATIONAL PITCHING COMPETITION // SUSTAINABILITY</span>
+            <span class="solder-dot"></span>
+          </div>
+
+          <div class="project-content-body reverse-on-desktop">
+            <div class="project-info">
+              <span class="project-category-tag neon-cyan">RESEARCH &amp; ECO INNOVATION</span>
+              <h3 class="featured-title">Bioplastics from Fish Scales — Idea Ignition 2026</h3>
+              <p class="featured-desc">
+                Finalist project at the <strong>“Idea Ignition 2026” Pitching Competition</strong> (APSURS 2026), hosted by the Faculty of Applied Sciences, Sabaragamuwa University of Sri Lanka. Represented Trincomalee Campus, Eastern University of Sri Lanka, pitching an eco-friendly bioplastic polymer engineered from organic fish scale waste to replace single-use plastics.
+              </p>
+
+              <div class="pcb-pill-group margin-bottom">
+                <span class="mini-chip-pill">Organic Chemistry</span>
+                <span class="mini-chip-pill">Applied Electronics</span>
+                <span class="mini-chip-pill">Bioplastic Polymers</span>
+                <span class="mini-chip-pill">Sustainability Pitch</span>
+                <span class="mini-chip-pill">APSURS 2026</span>
+              </div>
+            </div>
+
+            <!-- Uploaded Project Photos Gallery -->
+            <div class="project-photo-gallery">
+              <div class="gallery-photo-box">
+                <img src="idea_ignition_cert.jpg" alt="Idea Ignition 2026 Certificate - Sabaragamuwa University" class="gallery-img" />
+                <span class="photo-caption">Certificate &bull; APSURS 2026</span>
+              </div>
+              <div class="gallery-photo-box">
+                <img src="idea_ignition_team.jpg" alt="Idea Ignition 2026 Team Presentation" class="gallery-img" />
+                <span class="photo-caption">Innovation Team &bull; Sabaragamuwa Uni</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="projects-filter-pills" id="projectFilters">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="JavaScript">JavaScript</button>
-          <button class="filter-btn" data-filter="Python">Python</button>
-          <button class="filter-btn" data-filter="HTML">HTML</button>
-          <button class="filter-btn" data-filter="C++">C++</button>
-          <button class="filter-btn" data-filter="PHP">PHP</button>
-          <button class="filter-btn" data-filter="C#">C#</button>
+        <!-- PROJECT 3: SMART IOT HYDROPONICS & TELEMETRY SYSTEM -->
+        <div class="pcb-card featured-project-card 3d-lift-card spotlight-chip">
+          <div class="card-header-bar">
+            <span class="card-part-label">IOT &amp; HARDWARE CONTROL</span>
+            <span class="solder-dot"></span>
+          </div>
+
+          <div class="project-content-body">
+            <div class="project-info">
+              <span class="project-category-tag neon-green">IOT &amp; HARDWARE CONTROL</span>
+              <h3 class="featured-title">Smart IoT Water &amp; Sensor Telemetry System</h3>
+              <p class="featured-desc">
+                Integrated IoT microcontroller system designed for real-time environmental monitoring, water quality testing, sensor sampling, wireless telemetry, and automated pump controls.
+              </p>
+
+              <div class="pcb-pill-group">
+                <span class="mini-chip-pill">Arduino C++</span>
+                <span class="mini-chip-pill">EasyEDA PCB</span>
+                <span class="mini-chip-pill">Sensors &amp; Relays</span>
+                <span class="mini-chip-pill">Wi-Fi Telemetry</span>
+                <span class="mini-chip-pill">Web Dashboard</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Projects Grid -->
-      <div class="projects-grid" id="projectsGrid">
-        <!-- Skeleton Loaders -->
-        <div class="project-skeleton"></div>
-        <div class="project-skeleton"></div>
-        <div class="project-skeleton"></div>
-        <div class="project-skeleton"></div>
-        <div class="project-skeleton"></div>
-        <div class="project-skeleton"></div>
-      </div>
+        <!-- PROJECT 4: AUTONOMOUS ROBOTICS GUIDANCE ENGINE -->
+        <div class="pcb-card featured-project-card 3d-lift-card spotlight-chip">
+          <div class="card-header-bar">
+            <span class="card-part-label">ROBOTICS &amp; AUTOMATION</span>
+            <span class="solder-dot"></span>
+          </div>
 
-      <div id="ghError" class="gh-error" style="display:none;">
-        <p>Could not load live GitHub API repositories right now.</p>
-        <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="btn btn-sm btn-primary">View Directly on GitHub ↗</a>
-      </div>
+          <div class="project-content-body">
+            <div class="project-info">
+              <span class="project-category-tag neon-amber">ROBOTICS 1st RUNNER UP</span>
+              <h3 class="featured-title">Autonomous Robotics Motion &amp; Logic System</h3>
+              <p class="featured-desc">
+                Award-winning autonomous robotic vehicle incorporating microcontrollers, ultrasonic sensors, infrared line followers, and motor H-bridge drivers for real-time obstacle navigation.
+              </p>
 
+              <div class="pcb-pill-group">
+                <span class="mini-chip-pill">C / C++</span>
+                <span class="mini-chip-pill">Motor Drivers</span>
+                <span class="mini-chip-pill">Ultrasonic IR Sensors</span>
+                <span class="mini-chip-pill">Robotics Logic</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <!-- Achievements Section -->
-  <section id="achievements" class="section">
+  <!-- SECTION 05: ACHIEVEMENTS -->
+  <section id="achievements" class="pcb-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">05 &bull; Honors &amp; Awards</span>
-        <h2 class="section-title">Achievements</h2>
+      <div class="pcb-section-header" data-power-target="achievements">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-achievements"></span>
+          <span class="bus-address">SECTION // 05</span>
+        </div>
+        <span class="pcb-section-tag">05 &bull; ACHIEVEMENTS &amp; COMPETITIONS</span>
+        <h2 class="pcb-section-title">Honors &amp; Achievements</h2>
       </div>
 
       <div class="achievements-grid">
-        <div class="achievement-card spotlight">
-          <div class="ach-badge-icon">🏆</div>
+        
+        <!-- ACHIEVEMENT 1: IDEA IGNITION 2026 -->
+        <div class="pcb-card achievement-card 3d-lift-card">
+          <div class="ach-badge-icon">🌿</div>
           <div class="ach-details">
-            <div class="ach-year-tag">2025</div>
-            <h3>Robotics Competition — 1st Runner Up</h3>
-            <p class="ach-org">Trincomalee Campus, Eastern University of Sri Lanka</p>
-            <p class="ach-desc">Recognized for designing and programming an autonomous robotic system with microcontrollers and precision sensor logic.</p>
+            <div class="ach-year-tag">2026 FINALIST</div>
+            <h3>Finalist – “Idea Ignition 2026” Pitching Competition</h3>
+            <p class="ach-org">Hosted by Faculty of Applied Sciences, Sabaragamuwa University of Sri Lanka (APSURS 2026)</p>
+            <p class="ach-desc">
+              Represented Trincomalee Campus, Eastern University of Sri Lanka, pitching an eco-friendly bioplastics-from-fish-scales sustainability project to an academic panel.
+            </p>
+            <div class="ach-photos-row">
+              <img src="idea_ignition_cert.jpg" alt="Idea Ignition 2026 Certificate" class="ach-thumb" />
+              <img src="idea_ignition_team.jpg" alt="Idea Ignition 2026 Team" class="ach-thumb" />
+            </div>
           </div>
         </div>
 
-        <div class="achievement-card spotlight">
-          <div class="ach-badge-icon">🚀</div>
+        <!-- ACHIEVEMENT 2: ROBOTICS RUNNER UP 2025 -->
+        <div class="pcb-card achievement-card 3d-lift-card">
+          <div class="ach-badge-icon">🏆</div>
           <div class="ach-details">
-            <div class="ach-year-tag">2026</div>
-            <h3>SLIOT Semi-Finalist</h3>
-            <p class="ach-org">Sri Lanka Internet of Things Competition &bull; TechGenZ Team</p>
-            <p class="ach-desc">Selected among top IoT innovators in Sri Lanka for engineering an IoT smart monitoring and control solution.</p>
+            <div class="ach-year-tag">2025 AWARD</div>
+            <h3>Robotics Competition — 1st Runner Up</h3>
+            <p class="ach-org">Trincomalee Campus, Eastern University of Sri Lanka</p>
+            <p class="ach-desc">Awarded 1st runner-up for designing and programming an autonomous robotic vehicle with microcontrollers and sensor feedback loops.</p>
           </div>
         </div>
+
+        <!-- ACHIEVEMENT 3: SLIOT 2026 -->
+        <div class="pcb-card achievement-card 3d-lift-card">
+          <div class="ach-badge-icon">🚀</div>
+          <div class="ach-details">
+            <div class="ach-year-tag">2026 SEMI-FINALIST</div>
+            <h3>SLIOT Semi-Finalist</h3>
+            <p class="ach-org">Sri Lanka Internet of Things Competition &bull; TechGenZ Team</p>
+            <p class="ach-desc">Reached semi-finals in national IoT competition for engineering a smart monitoring and remote hardware control solution.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Education Timeline Section -->
-  <section id="education" class="section">
+  <!-- SECTION 06: EDUCATION -->
+  <section id="education" class="pcb-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">06 &bull; Academic Journey</span>
-        <h2 class="section-title">Education</h2>
+      <div class="pcb-section-header" data-power-target="education">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-education"></span>
+          <span class="bus-address">SECTION // 06</span>
+        </div>
+        <span class="pcb-section-tag">06 &bull; EDUCATION &amp; QUALIFICATIONS</span>
+        <h2 class="pcb-section-title">Education &amp; Qualifications</h2>
       </div>
 
       <div class="timeline-container">
         
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="tl-date">Present &bull; Undergraduate</span>
-            <h3>BSc in Applied Physics &amp; Electronics (Internal)</h3>
+        <div class="timeline-item pcb-tl-node">
+          <div class="timeline-marker-led"></div>
+          <div class="pcb-card timeline-content">
+            <span class="tl-date">PRESENT &bull; DEGREE</span>
+            <h3>BSc in Applied Physics &amp; Electronics</h3>
             <p class="tl-institution">Eastern University of Sri Lanka &mdash; Trincomalee Campus</p>
-            <p class="tl-desc">Focusing on electronics circuit design, semiconductor physics, signal processing, and hardware system architecture.</p>
+            <p class="tl-desc">Coursework in semiconductor physics, digital electronics, EasyEDA circuit design, signal processing, and embedded hardware systems.</p>
           </div>
         </div>
 
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="tl-date">Present &bull; External Degree</span>
+        <div class="timeline-item pcb-tl-node">
+          <div class="timeline-marker-led"></div>
+          <div class="pcb-card timeline-content">
+            <span class="tl-date">PRESENT &bull; DEGREE</span>
             <h3>BIT &mdash; Bachelor of Information Technology</h3>
             <p class="tl-institution">University of Moratuwa, Sri Lanka</p>
-            <p class="tl-desc">Comprehensive study of software engineering principles, web development, algorithms, and database management systems.</p>
+            <p class="tl-desc">Software engineering, web application development, algorithms, object-oriented design, and database management systems.</p>
           </div>
         </div>
 
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="tl-date">2023 &bull; Vocational Certification</span>
+        <div class="timeline-item pcb-tl-node">
+          <div class="timeline-marker-led"></div>
+          <div class="pcb-card timeline-content">
+            <span class="tl-date">2023 &bull; VOCATIONAL CERTIFICATION</span>
             <h3>Computer Application Assistant (NVQ Level 3)</h3>
             <p class="tl-institution">Completed July 15, 2023</p>
-            <p class="tl-desc">Practical qualification in computer systems, IT application support, and database fundamentals.</p>
+            <p class="tl-desc">Qualification covering computer hardware, database applications, and IT system troubleshooting.</p>
           </div>
         </div>
 
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="tl-date">2021 &bull; Secondary Education</span>
-            <h3>G.C.E. Advanced Level &mdash; Physical Science Stream</h3>
+        <div class="timeline-item pcb-tl-node">
+          <div class="timeline-marker-led"></div>
+          <div class="pcb-card timeline-content">
+            <span class="tl-date">2021 &bull; SECONDARY EDUCATION</span>
+            <h3>G.C.E. Advanced Level &mdash; Physical Science</h3>
             <p class="tl-institution">Ministry of Education, Sri Lanka</p>
-            <p class="tl-desc">Combined Mathematics (S), Physics (S), Chemistry (C).</p>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-marker"></div>
-          <div class="timeline-content">
-            <span class="tl-date">2018 &bull; Ordinary Level</span>
-            <h3>G.C.E. Ordinary Level</h3>
-            <p class="tl-institution">Ministry of Education, Sri Lanka</p>
-            <p class="tl-desc">Passed with Distinction results: 4A, 4B, 1C (Mathematics A, English C).</p>
+            <p class="tl-desc">Combined Mathematics, Physics, and Chemistry stream.</p>
           </div>
         </div>
 
@@ -560,113 +772,126 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="section">
+  <!-- SECTION 07: CONTACT -->
+  <section id="contact" class="pcb-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">07 &bull; Connection</span>
-        <h2 class="section-title">Get In Touch</h2>
+      <div class="pcb-section-header" data-power-target="contact">
+        <div class="header-status-node">
+          <span class="status-led red-green" id="led-contact"></span>
+          <span class="bus-address">SECTION // 07</span>
+        </div>
+        <span class="pcb-section-tag">07 &bull; GET IN TOUCH</span>
+        <h2 class="pcb-section-title">Contact Me</h2>
       </div>
 
       <div class="contact-grid">
         <div class="contact-info-column">
           <p class="contact-lead">
-            Whether you have a job opportunity, a collaboration project in software/IoT, or just want to connect — my inbox is always open!
+            Feel free to reach out! I am actively looking for an entry-level software development or engineering role. Whether you have a project, job opportunity, or question — I'd love to connect.
           </p>
 
           <div class="contact-card-list">
-            <a href="mailto:dilushanmehavannan@gmail.com" class="contact-card">
+            <a href="mailto:dilushanmehavannan@gmail.com" class="pcb-card contact-card 3d-lift-card">
               <div class="cc-icon">✉️</div>
               <div class="cc-body">
-                <span class="cc-label">Email Address</span>
+                <span class="cc-label">EMAIL ADDRESS</span>
                 <span class="cc-val">dilushanmehavannan@gmail.com</span>
               </div>
               <button class="copy-btn-inline" onclick="event.preventDefault(); copyEmail('dilushanmehavannan@gmail.com');" title="Copy Email">📋</button>
             </a>
 
-            <a href="tel:+94712875703" class="contact-card">
+            <a href="tel:+94712875703" class="pcb-card contact-card 3d-lift-card">
               <div class="cc-icon">📱</div>
               <div class="cc-body">
-                <span class="cc-label">Phone / WhatsApp</span>
+                <span class="cc-label">PHONE / WHATSAPP</span>
                 <span class="cc-val">+94 71 287 5703</span>
               </div>
             </a>
 
-            <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" rel="noopener" class="contact-card">
+            <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" rel="noopener" class="pcb-card contact-card 3d-lift-card">
               <div class="cc-icon">💼</div>
               <div class="cc-body">
-                <span class="cc-label">LinkedIn Profile</span>
+                <span class="cc-label">LINKEDIN PROFILE</span>
                 <span class="cc-val">linkedin.com/in/dilushan-mehavannan</span>
               </div>
             </a>
 
-            <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="contact-card">
+            <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener" class="pcb-card contact-card 3d-lift-card">
               <div class="cc-icon">🐙</div>
               <div class="cc-body">
-                <span class="cc-label">GitHub Account</span>
+                <span class="cc-label">GITHUB REPOSITORIES</span>
                 <span class="cc-val">github.com/Dilushan-Mehavannan</span>
               </div>
             </a>
 
-            <div class="contact-card no-link">
+            <div class="pcb-card contact-card no-link">
               <div class="cc-icon">📍</div>
               <div class="cc-body">
-                <span class="cc-label">Current Address</span>
+                <span class="cc-label">LOCATION</span>
                 <span class="cc-val">284, Anpuvalipuram, Trincomalee, Sri Lanka</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Contact Form -->
+        <!-- Contact Form Card -->
         <div class="contact-form-column">
-          <form class="contact-form" id="contactForm" onsubmit="handleForm(event)">
-            <h3 class="form-heading">Send Me a Message</h3>
-            
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" placeholder="John Doe" required />
+          <div class="pcb-card contact-form-card" id="contactPortBlock">
+            <div class="port-header-bar">
+              <div class="screw-head"></div>
+              <span class="port-part-no">SEND A MESSAGE</span>
+              <div class="screw-head"></div>
             </div>
 
-            <div class="form-group">
-              <label for="email">Your Email</label>
-              <input type="email" id="email" name="email" placeholder="john@example.com" required />
-            </div>
+            <form class="contact-form" id="contactForm" onsubmit="handleForm(event)">
+              <h3 class="form-heading">Send Me a Message</h3>
+              
+              <div class="form-group pcb-input-group">
+                <label for="name"><span class="pin-tag">FIELD 01</span> YOUR NAME</label>
+                <input type="text" id="name" name="name" placeholder="e.g. John Doe" required />
+              </div>
 
-            <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" name="subject" placeholder="Project Opportunity / Inquiry" required />
-            </div>
+              <div class="form-group pcb-input-group">
+                <label for="email"><span class="pin-tag">FIELD 02</span> YOUR EMAIL</label>
+                <input type="email" id="email" name="email" placeholder="john@domain.com" required />
+              </div>
 
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" rows="5" placeholder="Hi Dilushan, I'd like to discuss a project..." required></textarea>
-            </div>
+              <div class="form-group pcb-input-group">
+                <label for="subject"><span class="pin-tag">FIELD 03</span> SUBJECT</label>
+                <input type="text" id="subject" name="subject" placeholder="Job Opportunity / Project Inquiry" required />
+              </div>
 
-            <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
-              <span>Send Message ↗</span>
-            </button>
+              <div class="form-group pcb-input-group">
+                <label for="message"><span class="pin-tag">FIELD 04</span> YOUR MESSAGE</label>
+                <textarea id="message" name="message" rows="4" placeholder="Type your message here..." required></textarea>
+              </div>
 
-            <div id="formMsg" class="form-response-msg" style="display:none;"></div>
-          </form>
+              <button type="submit" class="btn btn-pcb-primary btn-full btn-lg" id="submitBtn">
+                <span class="btn-spark-effect"></span>
+                <span>SEND MESSAGE ⚡</span>
+              </button>
+
+              <div id="formMsg" class="form-response-msg" style="display:none;"></div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <footer class="footer pcb-footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="logo-text">MD</span><span class="dot">.</span>
-        <p>&copy; 2026 Mehavannan Dilushan. Engineered with precision &amp; passion.</p>
+        <span class="logo-text">MEHAVANNAN DILUSHAN</span><span class="logo-dot">.DEV</span>
+        <p>&copy; 2026 Mehavannan Dilushan. All rights reserved.</p>
       </div>
 
       <div class="footer-links">
-        <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:dilushanmehavannan@gmail.com">Email</a>
-        <a href="#" class="back-to-top" id="backToTopBtn" title="Back to top">↑ Top</a>
+        <a href="https://github.com/Dilushan-Mehavannan" target="_blank" rel="noopener">GITHUB</a>
+        <a href="https://www.linkedin.com/in/dilushan-mehavannan" target="_blank" rel="noopener">LINKEDIN</a>
+        <a href="mailto:dilushanmehavannan@gmail.com">EMAIL</a>
+        <a href="#" class="back-to-top" id="backToTopBtn" title="Back to Top">↑ BACK TO TOP</a>
       </div>
     </div>
   </footer>

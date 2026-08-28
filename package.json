@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "description": "Professional Industry Portfolio of Mehavannan Dilushan - Full-Stack Developer & Physics/Electronics Engineer",
   "scripts": {
-    "start": "npx serve ."
+    "start": "npx serve .",
+    "dev": "npx serve ."
   },
   "keywords": [
     "portfolio",

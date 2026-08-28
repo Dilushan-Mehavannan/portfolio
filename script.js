@@ -1,42 +1,48 @@
 /* ==========================================================================
-   MEHAVANNAN DILUSHAN - PORTFOLIO INTERACTIVITY & GITHUB ENGINE
+   MEHAVANNAN DILUSHAN - 3D VIDEOGRAPHY PCB MOTHERBOARD ENGINE
    ========================================================================== */
 
-const GITHUB_USER = 'Dilushan-Mehavannan';
 const FORMSPREE_URL = 'https://formspree.io/f/mojolrbo';
 
-let allRepos = [];
-
-// Language color mapping
-const langColors = {
-  JavaScript: '#f1e05a',
-  Python: '#3572A5',
-  HTML: '#e34c26',
-  CSS: '#563d7c',
-  'C++': '#f34b7d',
-  'C#': '#178600',
-  PHP: '#4F5D95',
-  TypeScript: '#2b7489',
-  Java: '#b07219',
-  C: '#555555',
-  Shell: '#89e051',
-  default: '#6366f1'
+// Skill relationships for interactive circuit trace highlights
+const skillConnections = {
+  js: ['html', 'css', 'php', 'restapi', 'vscode', 'git'],
+  py: ['cpp', 'mysql', 'mssql', 'restapi', 'vscode'],
+  cpp: ['arduino', 'pcbfab', 'embedded', 'sensors', 'physicslab'],
+  arduino: ['cpp', 'easyeda', 'pcbfab', 'embedded', 'sensors'],
+  easyeda: ['pcbfab', 'embedded', 'sensors', 'physicslab', 'arduino'],
+  mysql: ['mssql', 'relational', 'restapi', 'php', 'js'],
+  git: ['vscode', 'js', 'py', 'cpp']
 };
 
-// Initialize on DOM load
-document.addEventListener('DOMContentLoaded', () => {
-  initCursor();
-  initNavbar();
-  initSpotlights();
-  init3DPhoto();
-  initSkillsFilter();
-  initProjectControls();
-  
-  loadGitHubData();
-});
+function initAll() {
+  const safeRun = (fn, name) => {
+    try {
+      fn();
+    } catch (err) {
+      console.warn(`[PCB Engine] Error in ${name}:`, err);
+    }
+  };
+
+  safeRun(initCursor, 'initCursor');
+  safeRun(initNavbar, 'initNavbar');
+  safeRun(init3DVideographyEngine, 'init3DVideographyEngine');
+  safeRun(initSparkEngine, 'initSparkEngine');
+  safeRun(init3DTilt, 'init3DTilt');
+  safeRun(initSpotlightMouseTracking, 'initSpotlightMouseTracking');
+  safeRun(initSkillsFilter, 'initSkillsFilter');
+  safeRun(initSkillsTraceVisualizer, 'initSkillsTraceVisualizer');
+  safeRun(initGSAPPowerTriggers, 'initGSAPPowerTriggers');
+}
+
+if (document.readyState !== 'loading') {
+  initAll();
+} else {
+  document.addEventListener('DOMContentLoaded', initAll);
+}
 
 /* --------------------------------------------------------------------------
-   1. CUSTOM CURSOR ENGINE
+   1. CUSTOM PRECISION CURSOR
    -------------------------------------------------------------------------- */
 function initCursor() {
   const cursor = document.getElementById('cursor');
@@ -52,21 +58,21 @@ function initCursor() {
     follower.style.top = e.clientY + 'px';
   });
 
-  const interactiveElements = document.querySelectorAll('a, button, .project-card, .expertise-card, .skill-badge, .contact-card');
+  const interactiveElements = document.querySelectorAll('a, button, .pcb-card, .pcb-chip-badge, .contact-card, .gallery-photo-box');
   interactiveElements.forEach(el => {
     el.addEventListener('mouseenter', () => {
       follower.style.transform = 'translate(-50%, -50%) scale(1.6)';
-      follower.style.borderColor = 'rgba(99, 102, 241, 0.8)';
+      follower.style.borderColor = 'var(--neon-cyan)';
     });
     el.addEventListener('mouseleave', () => {
       follower.style.transform = 'translate(-50%, -50%) scale(1)';
-      follower.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+      follower.style.borderColor = 'var(--copper-gold)';
     });
   });
 }
 
 /* --------------------------------------------------------------------------
-   2. NAVBAR & MOBILE MENU TOGGLE
+   2. NAVBAR & SCROLL CONTROLS
    -------------------------------------------------------------------------- */
 function initNavbar() {
   const navToggle = document.getElementById('navToggle');
@@ -85,10 +91,10 @@ function initNavbar() {
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 40) {
-      navbar.style.background = 'rgba(8, 9, 13, 0.95)';
-      navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+      navbar.style.background = 'rgba(4, 7, 17, 0.96)';
+      navbar.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.85), 0 0 15px rgba(229, 169, 60, 0.2)';
     } else {
-      navbar.style.background = 'rgba(8, 9, 13, 0.8)';
+      navbar.style.background = 'rgba(4, 7, 17, 0.88)';
       navbar.style.boxShadow = 'none';
     }
   });
@@ -103,10 +109,441 @@ function initNavbar() {
 }
 
 /* --------------------------------------------------------------------------
-   3. SPOTLIGHT CARD MOUSE TRACKING
+   3. THREE.JS 3D VIDEOGRAPHY ENGINE (Cinematic Scroll Camera Flythrough)
    -------------------------------------------------------------------------- */
-function initSpotlights() {
-  document.querySelectorAll('.spotlight').forEach(card => {
+function init3DVideographyEngine() {
+  const canvas = document.getElementById('pcb3d-canvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+
+  const scene = new THREE.Scene();
+  scene.background = null;
+
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+  
+  // Initial camera location (Hero View)
+  const currentCamPos = new THREE.Vector3(0, 32, 42);
+  const targetCamPos = new THREE.Vector3(0, 32, 42);
+  
+  const currentLookAt = new THREE.Vector3(0, 0, 0);
+  const targetLookAt = new THREE.Vector3(0, 0, 0);
+
+  camera.position.copy(currentCamPos);
+  camera.lookAt(currentLookAt);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Lighting Setup
+  const ambientLight = new THREE.AmbientLight(0x0a1224, 2.8);
+  scene.add(ambientLight);
+
+  const dirLight1 = new THREE.DirectionalLight(0xe5a93c, 2.2);
+  dirLight1.position.set(35, 50, 25);
+  scene.add(dirLight1);
+
+  const dirLight2 = new THREE.DirectionalLight(0x00f0ff, 2.0);
+  dirLight2.position.set(-35, 40, -25);
+  scene.add(dirLight2);
+
+  // Group for the vast 3D Motherboard Landscape
+  const boardGroup = new THREE.Group();
+  scene.add(boardGroup);
+
+  // 1. PCB Board Substrate Mesh (Vast Silicon Board)
+  const boardGeo = new THREE.BoxGeometry(70, 1.5, 50);
+  const boardMat = new THREE.MeshStandardMaterial({
+    color: 0x060b1a,
+    roughness: 0.25,
+    metalness: 0.85
+  });
+  const pcbBoard = new THREE.Mesh(boardGeo, boardMat);
+  pcbBoard.position.y = -0.75;
+  boardGroup.add(pcbBoard);
+
+  // 2. Copper Ground Grid Lines
+  const gridHelper = new THREE.GridHelper(68, 34, 0xe5a93c, 0x14203e);
+  gridHelper.position.y = 0.02;
+  boardGroup.add(gridHelper);
+
+  // 3. Central CPU Processor Chip
+  const cpuGroup = new THREE.Group();
+  const cpuGeo = new THREE.BoxGeometry(14, 2.0, 14);
+  const cpuMat = new THREE.MeshStandardMaterial({ color: 0x080e1c, roughness: 0.2, metalness: 0.9 });
+  const cpuMesh = new THREE.Mesh(cpuGeo, cpuMat);
+  cpuMesh.position.y = 1.0;
+  cpuGroup.add(cpuMesh);
+
+  // Metallic Heat Spreader Top
+  const heatSpreaderGeo = new THREE.BoxGeometry(9, 0.3, 9);
+  const heatSpreaderMat = new THREE.MeshStandardMaterial({ color: 0xe5a93c, metalness: 0.95, roughness: 0.1 });
+  const heatSpreader = new THREE.Mesh(heatSpreaderGeo, heatSpreaderMat);
+  heatSpreader.position.y = 2.15;
+  cpuGroup.add(heatSpreader);
+
+
+
+  // CPU Metallic Pin Legs on 4 sides
+  const pinMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.9, roughness: 0.2 });
+  for (let i = -6.0; i <= 6.0; i += 1.2) {
+    const pinN = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 1.4), pinMat);
+    pinN.position.set(i, 0.5, 7.5);
+    cpuGroup.add(pinN);
+
+    const pinS = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.5, 1.4), pinMat);
+    pinS.position.set(i, 0.5, -7.5);
+    cpuGroup.add(pinS);
+
+    const pinE = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 0.4), pinMat);
+    pinE.position.set(7.5, 0.5, i);
+    cpuGroup.add(pinE);
+
+    const pinW = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 0.4), pinMat);
+    pinW.position.set(-7.5, 0.5, i);
+    cpuGroup.add(pinW);
+  }
+  boardGroup.add(cpuGroup);
+
+  // 4. Auxiliary Microchips (RAM, GPU, IOT, DSP, PWR, BUS, NET, AI)
+  const chipsData = [
+    { x: -22, z: -14, w: 8, d: 10, col: 0x00f0ff },
+    { x: 22, z: -14, w: 10, d: 8, col: 0xffd700 },
+    { x: -22, z: 12, w: 9, d: 9, col: 0x00ff9d },
+    { x: 22, z: 12, w: 8, d: 10, col: 0xa855f7 },
+    { x: 0, z: -18, w: 12, d: 5, col: 0x00f0ff },
+    { x: 0, z: 18, w: 12, d: 5, col: 0xe5a93c }
+  ];
+
+  chipsData.forEach(c => {
+    const chipGeo = new THREE.BoxGeometry(c.w, 1.2, c.d);
+    const chipMat = new THREE.MeshStandardMaterial({ color: 0x0a1428, metalness: 0.85, roughness: 0.25 });
+    const auxChip = new THREE.Mesh(chipGeo, chipMat);
+    auxChip.position.set(c.x, 0.6, c.z);
+    boardGroup.add(auxChip);
+
+    const accentGeo = new THREE.BoxGeometry(c.w * 0.75, 0.15, c.d * 0.75);
+    const accentMat = new THREE.MeshStandardMaterial({ color: c.col, metalness: 0.9, roughness: 0.1 });
+    const accent = new THREE.Mesh(accentGeo, accentMat);
+    accent.position.set(c.x, 1.25, c.z);
+    boardGroup.add(accent);
+  });
+
+  // 5. Cylindrical Capacitors
+  for (let i = 0; i < 8; i++) {
+    const capGeo = new THREE.CylinderGeometry(1.4, 1.4, 4.0, 16);
+    const capMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.9, roughness: 0.2 });
+    const cap = new THREE.Mesh(capGeo, capMat);
+    cap.position.set(-14 + i * 4.0, 2.0, -22);
+    boardGroup.add(cap);
+
+    const capTopGeo = new THREE.CylinderGeometry(1.35, 1.35, 0.2, 16);
+    const capTopMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.95 });
+    const capTop = new THREE.Mesh(capTopGeo, capTopMat);
+    capTop.position.set(-14 + i * 4.0, 4.1, -22);
+    boardGroup.add(capTop);
+  }
+
+  // 6. Glowing Status LEDs
+  const ledColors = [0x00ff9d, 0x00f0ff, 0xffd700, 0xa855f7];
+  const leds = [];
+  ledColors.forEach((col, idx) => {
+    const ledLight = new THREE.PointLight(col, 3.5, 20);
+    ledLight.position.set(-24 + idx * 16, 2.5, 20);
+    scene.add(ledLight);
+
+    const ledMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.6, 12, 12),
+      new THREE.MeshBasicMaterial({ color: col })
+    );
+    ledMesh.position.set(-24 + idx * 16, 0.8, 20);
+    boardGroup.add(ledMesh);
+
+    leds.push({ light: ledLight, mesh: ledMesh, baseInt: 3.5 });
+  });
+
+  // 7. Moving Electrical Current Data Particles (60+ Stream Vectors)
+  const particleCount = 65;
+  const particleGeo = new THREE.BufferGeometry();
+  const particlePositions = new Float32Array(particleCount * 3);
+  const particleVelocities = [];
+
+  for (let i = 0; i < particleCount; i++) {
+    const x = (Math.random() - 0.5) * 60;
+    const z = (Math.random() - 0.5) * 40;
+    particlePositions[i * 3] = x;
+    particlePositions[i * 3 + 1] = 0.3;
+    particlePositions[i * 3 + 2] = z;
+
+    particleVelocities.push({
+      vx: (Math.random() - 0.5) * 0.22,
+      vz: (Math.random() - 0.5) * 0.22
+    });
+  }
+
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+  const particleMat = new THREE.PointsMaterial({
+    color: 0x00f0ff,
+    size: 0.7,
+    transparent: true,
+    opacity: 0.9
+  });
+  const particleSystem = new THREE.Points(particleGeo, particleMat);
+  boardGroup.add(particleSystem);
+
+  // Mouse Parallax Offsets
+  let mouseX = 0;
+  let mouseY = 0;
+  window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  // ------------------------------------------------------------------------
+  // 3D VIDEOGRAPHY CAMERA PATH CONTROLLER (Scroll Keyframes)
+  // ------------------------------------------------------------------------
+  function updateCameraVideography() {
+    const scrollY = window.scrollY;
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = Math.max(0, Math.min(1, scrollY / (totalHeight || 1)));
+
+    // Define 3D Camera Videography Waypoints across sections
+    if (progress < 0.12) {
+      // 0. Hero Section: High-angle cinematic overview
+      targetCamPos.set(0 + mouseX * 2, 32 + mouseY * 2, 42);
+      targetLookAt.set(0, 0, 0);
+    } else if (progress < 0.25) {
+      // 1. About Section: Low-angle glide into CPU substrate
+      targetCamPos.set(-18 + mouseX * 2, 16 + mouseY * 2, 22);
+      targetLookAt.set(-8, 0, -4);
+    } else if (progress < 0.40) {
+      // 2. Expertise Section: Low tracking shot along power rails
+      targetCamPos.set(18 + mouseX * 2, 12 + mouseY * 2, 16);
+      targetLookAt.set(6, 0, -2);
+    } else if (progress < 0.55) {
+      // 3. Skills Matrix: Sweep across memory chip banks
+      targetCamPos.set(-22 + mouseX * 2, 24 + mouseY * 2, 8);
+      targetLookAt.set(-5, 0, 0);
+    } else if (progress < 0.72) {
+      // 4. Projects Showcase: Flyover of hardware component cards
+      targetCamPos.set(0 + mouseX * 2, 16 + mouseY * 2, 28);
+      targetLookAt.set(0, 0, -6);
+    } else if (progress < 0.84) {
+      // 5. Achievements Section: Swoop to honors circuit block
+      targetCamPos.set(16 + mouseX * 2, 20 + mouseY * 2, -14);
+      targetLookAt.set(5, 0, -10);
+    } else if (progress < 0.94) {
+      // 6. Education Timeline: Tracing sequential bus line
+      targetCamPos.set(-14 + mouseX * 2, 26 + mouseY * 2, -18);
+      targetLookAt.set(-4, 0, -12);
+    } else {
+      // 7. Contact Terminal: Descend into I/O connector block
+      targetCamPos.set(0 + mouseX * 2, 10 + mouseY * 2, 20);
+      targetLookAt.set(0, 0, 0);
+    }
+
+    // Update HUD Coordinates Readout
+    const coordsEl = document.getElementById('camCoords');
+    if (coordsEl) {
+      coordsEl.textContent = `POS: X: ${currentCamPos.x.toFixed(1)} Y: ${currentCamPos.y.toFixed(1)} Z: ${currentCamPos.z.toFixed(1)}`;
+    }
+  }
+
+  window.addEventListener('scroll', updateCameraVideography);
+
+  // Window Resize Handler
+  window.addEventListener('resize', () => {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  });
+
+  // Render Loop
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const elapsedTime = clock.getElapsedTime();
+
+    // Lerp camera position and lookAt for silky smooth 3D videography flythrough
+    currentCamPos.lerp(targetCamPos, 0.06);
+    currentLookAt.lerp(targetLookAt, 0.06);
+
+    camera.position.copy(currentCamPos);
+    camera.lookAt(currentLookAt);
+
+    // Pulse LEDs
+    leds.forEach((led, idx) => {
+      led.light.intensity = led.baseInt + Math.sin(elapsedTime * 4 + idx) * 1.8;
+    });
+
+
+
+    // Animate CPU Heat Spreader Glow
+    heatSpreaderMat.color.setHSL(0.12, 0.9, 0.4 + Math.sin(elapsedTime * 3) * 0.18);
+
+    // Move electrical current particles
+    const positions = particleSystem.geometry.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      let x = positions[i * 3];
+      let z = positions[i * 3 + 2];
+
+      x += particleVelocities[i].vx;
+      z += particleVelocities[i].vz;
+
+      if (Math.abs(x) > 32) particleVelocities[i].vx *= -1;
+      if (Math.abs(z) > 22) particleVelocities[i].vz *= -1;
+
+      positions[i * 3] = x;
+      positions[i * 3 + 2] = z;
+    }
+    particleSystem.geometry.attributes.position.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+}
+
+/* --------------------------------------------------------------------------
+   4. ELECTRICAL SPARK BURST ENGINE
+   -------------------------------------------------------------------------- */
+function initSparkEngine() {
+  const canvas = document.getElementById('spark-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width, height;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const sparks = [];
+
+  function createSparks(x, y) {
+    const count = 18 + Math.floor(Math.random() * 12);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 2 + Math.random() * 6;
+      sparks.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius: 1.5 + Math.random() * 2,
+        color: Math.random() > 0.4 ? '#ffd700' : '#00f0ff',
+        life: 1,
+        decay: 0.02 + Math.random() * 0.03
+      });
+    }
+  }
+
+  window.addEventListener('click', (e) => {
+    createSparks(e.clientX, e.clientY);
+  });
+
+  function renderSparks() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.x += s.vx;
+      s.y += s.vy;
+      s.vy += 0.1;
+      s.life -= s.decay;
+
+      if (s.life <= 0) {
+        sparks.splice(i, 1);
+        continue;
+      }
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.radius * s.life, 0, Math.PI * 2);
+      ctx.fillStyle = s.color;
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = 8;
+      ctx.globalAlpha = s.life;
+      ctx.fill();
+      ctx.globalAlpha = 1.0;
+      ctx.shadowBlur = 0;
+    }
+
+    requestAnimationFrame(renderSparks);
+  }
+
+  renderSparks();
+}
+
+/* --------------------------------------------------------------------------
+   5. 3D PERSPECTIVE TILT
+   -------------------------------------------------------------------------- */
+function init3DTilt() {
+  const photoCard = document.getElementById('heroPhotoWrap');
+  if (photoCard) {
+    const photoFrame = photoCard.querySelector('.photo-frame');
+    const badge = photoCard.querySelector('.hero-status-badge');
+    const header = photoCard.querySelector('.chip-surface-header');
+
+    photoCard.addEventListener('mousemove', (e) => {
+      const rect = photoCard.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = -((y - centerY) / centerY) * 22;
+      const rotateY = ((x - centerX) / centerX) * 22;
+
+      photoCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.06, 1.06, 1.06)`;
+
+      if (photoFrame) photoFrame.style.transform = `translateZ(35px)`;
+      if (badge) badge.style.transform = `translateX(-50%) translateZ(65px)`;
+      if (header) header.style.transform = `translateZ(25px)`;
+    });
+
+    photoCard.addEventListener('mouseleave', () => {
+      photoCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      if (photoFrame) photoFrame.style.transform = 'translateZ(0px)';
+      if (badge) badge.style.transform = 'translateX(-50%) translateZ(45px)';
+      if (header) header.style.transform = 'translateZ(0px)';
+    });
+  }
+
+  Array.from(document.getElementsByClassName('3d-lift-card')).forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = -((y - centerY) / centerY) * 10;
+      const rotateY = ((x - centerX) / centerX) * 10;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   6. SPOTLIGHT MOUSE TRACKING
+   -------------------------------------------------------------------------- */
+function initSpotlightMouseTracking() {
+  document.querySelectorAll('.spotlight-chip').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -118,275 +555,226 @@ function initSpotlights() {
 }
 
 /* --------------------------------------------------------------------------
-   3B. INTERACTIVE 3D PERSPECTIVE TILT FOR HERO PHOTO
-   -------------------------------------------------------------------------- */
-function init3DPhoto() {
-  const photoWrap = document.getElementById('heroPhotoWrap');
-  if (!photoWrap) return;
-
-  const photo = photoWrap.querySelector('.hero-photo');
-  const borderRing = photoWrap.querySelector('.photo-border-ring');
-  const badge = photoWrap.querySelector('.hero-status-badge');
-
-  photoWrap.addEventListener('mousemove', (e) => {
-    const rect = photoWrap.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-
-    const rotateX = -((y - centerY) / centerY) * 16;
-    const rotateY = ((x - centerX) / centerX) * 16;
-
-    photoWrap.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-    if (photo) photo.style.transform = 'translateZ(35px)';
-    if (borderRing) borderRing.style.transform = 'translateZ(20px)';
-    if (badge) badge.style.transform = 'translateX(-50%) translateZ(60px)';
-  });
-
-  photoWrap.addEventListener('mouseleave', () => {
-    photoWrap.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-    photoWrap.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    if (photo) photo.style.transform = 'translateZ(25px)';
-    if (borderRing) borderRing.style.transform = 'translateZ(15px)';
-    if (badge) badge.style.transform = 'translateX(-50%) translateZ(45px)';
-
-    setTimeout(() => {
-      photoWrap.style.transition = 'transform 0.1s ease-out';
-    }, 400);
-  });
-}
-
-/* --------------------------------------------------------------------------
-   4. SKILLS CATEGORY FILTER
+   7. SKILLS MATRIX FILTER & TRACE VISUALIZER
    -------------------------------------------------------------------------- */
 function initSkillsFilter() {
   const filterBtns = document.querySelectorAll('.skills-filter-btn');
   const skillBoxes = document.querySelectorAll('.skill-category-box');
+  const searchInput = document.getElementById('skillSearchInput');
+  const clearBtn = document.getElementById('clearSkillSearch');
+  const counterEl = document.getElementById('searchResultsCounter');
+
+  let currentCategory = 'all';
+
+  function filterSkills() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+    if (clearBtn) {
+      clearBtn.style.display = query.length > 0 ? 'inline-block' : 'none';
+    }
+
+    let totalVisibleSkills = 0;
+
+    skillBoxes.forEach(box => {
+      const boxCat = box.getAttribute('data-category') || box.dataset.category;
+      const isCatMatch = (currentCategory === 'all' || boxCat === currentCategory);
+
+      if (!isCatMatch) {
+        box.style.display = 'none';
+        return;
+      }
+
+      let categoryHasMatches = false;
+      const badges = box.querySelectorAll('.pcb-chip-badge');
+
+      badges.forEach(badge => {
+        const badgeText = badge.textContent.toLowerCase();
+        const isMatch = (query === '' || badgeText.includes(query));
+
+        if (isMatch) {
+          badge.style.display = 'inline-flex';
+          badge.style.opacity = '1';
+          if (query !== '') {
+            badge.classList.add('search-highlight');
+          } else {
+            badge.classList.remove('search-highlight');
+          }
+          categoryHasMatches = true;
+          totalVisibleSkills++;
+        } else {
+          badge.style.display = 'none';
+          badge.classList.remove('search-highlight');
+        }
+      });
+
+      if (categoryHasMatches) {
+        box.style.display = 'block';
+        box.style.opacity = '1';
+        box.style.visibility = 'visible';
+        box.style.transform = 'none';
+      } else {
+        box.style.display = 'none';
+      }
+    });
+
+    if (counterEl) {
+      if (query !== '') {
+        counterEl.textContent = `FOUND ${totalVisibleSkills} MATCHING SKILL${totalVisibleSkills === 1 ? '' : 'S'} FOR "${query.toUpperCase()}"`;
+      } else if (currentCategory !== 'all') {
+        counterEl.textContent = `SHOWING ${totalVisibleSkills} SKILLS IN ${currentCategory.toUpperCase()} CATEGORY`;
+      } else {
+        counterEl.textContent = `SHOWING ALL ${totalVisibleSkills} SKILLS & TECHNOLOGIES`;
+      }
+    }
+  }
 
   filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const targetCat = btn.getAttribute('data-skill-filter') || (btn.dataset ? btn.dataset.skillFilter : 'all');
+      currentCategory = targetCat;
+
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
-      const filter = btn.dataset.skillFilter;
+      filterSkills();
 
-      skillBoxes.forEach(box => {
-        if (filter === 'all' || box.dataset.category === filter) {
-          box.style.display = 'block';
-        } else {
-          box.style.display = 'none';
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+    });
+  });
+
+  if (searchInput) {
+    ['input', 'keyup', 'change', 'search'].forEach(evt => {
+      searchInput.addEventListener(evt, filterSkills);
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (searchInput) searchInput.value = '';
+      filterSkills();
+      if (searchInput) searchInput.focus();
+    });
+  }
+
+  // Initial Run
+  filterSkills();
+}
+
+function initSkillsTraceVisualizer() {
+  const skillNodes = Array.from(document.getElementsByClassName('3d-chip-node'));
+
+  skillNodes.forEach(node => {
+    node.addEventListener('mouseenter', () => {
+      const skillId = node.getAttribute('data-skill-id') || (node.dataset ? node.dataset.skillId : null);
+      if (!skillId) return;
+
+      const related = skillConnections[skillId] || [];
+
+      skillNodes.forEach(other => {
+        const otherId = other.getAttribute('data-skill-id') || (other.dataset ? other.dataset.skillId : null);
+        if (otherId && related.includes(otherId)) {
+          other.style.borderColor = 'var(--neon-cyan)';
+          other.style.boxShadow = '0 0 15px rgba(0, 240, 255, 0.6)';
+          other.style.transform = 'translateY(-3px) scale(1.05)';
+        } else if (other !== node) {
+          other.style.opacity = '0.45';
         }
+      });
+    });
+
+    node.addEventListener('mouseleave', () => {
+      skillNodes.forEach(other => {
+        other.style.borderColor = '';
+        other.style.boxShadow = '';
+        other.style.transform = '';
+        other.style.opacity = '';
       });
     });
   });
 }
 
 /* --------------------------------------------------------------------------
-   5. GITHUB DATA ENGINE (PROFILE, REPOS, ACTIVITY)
+   8. GSAP SCROLL-TRIGGERED POWER-ON SEQUENCES
    -------------------------------------------------------------------------- */
-async function loadGitHubData() {
-  await Promise.all([
-    fetchProfile(),
-    fetchRepos()
-  ]);
-}
+function initGSAPPowerTriggers() {
+  const sections = document.querySelectorAll('.pcb-section');
 
-async function fetchProfile() {
-  try {
-    const res = await fetch(`https://api.github.com/users/${GITHUB_USER}`);
-    if (!res.ok) throw new Error('User fetch failed');
-    
-    const user = await res.json();
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const sectionId = entry.target.getAttribute('id');
+        const led = document.getElementById(`led-${sectionId}`);
+        if (led) {
+          led.classList.add('online');
+        }
 
-    const avatarEl = document.getElementById('ghAvatar');
-    if (avatarEl && user.avatar_url) avatarEl.src = user.avatar_url;
-
-    document.getElementById('ghName').textContent = user.name || user.login;
-    document.getElementById('ghBio').textContent = user.bio || 'IT Student • Physics & Electronics Specialist';
-    document.getElementById('ghRepos').textContent = user.public_repos || 0;
-    document.getElementById('ghFollowers').textContent = user.followers || 0;
-    document.getElementById('ghFollowing').textContent = user.following || 0;
-
-    const repoCounter = document.getElementById('repoCounter');
-    if (repoCounter) repoCounter.textContent = user.public_repos || 0;
-
-  } catch (err) {
-    console.warn('GitHub profile API fallback:', err);
-    document.getElementById('ghRepos').textContent = '10+';
-    document.getElementById('repoCounter').textContent = '10+';
-  }
-}
-
-async function fetchRepos() {
-  const grid = document.getElementById('projectsGrid');
-  const errorEl = document.getElementById('ghError');
-
-  try {
-    const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`);
-    if (!res.ok) throw new Error('Repos fetch failed');
-    
-    const repos = await res.json();
-    
-    // Sort & filter repos
-    allRepos = repos.filter(r => !r.fork);
-    
-    if (allRepos.length === 0) {
-      allRepos = repos; // Fallback to all if no non-forks
-    }
-
-    renderProjects(allRepos);
-    if (errorEl) errorEl.style.display = 'none';
-
-  } catch (err) {
-    console.error('GitHub Repos API Error:', err);
-    if (errorEl) errorEl.style.display = 'block';
-    renderFallbackProjects();
-  }
-}
-
-function renderProjects(repos) {
-  const grid = document.getElementById('projectsGrid');
-  if (!grid) return;
-
-  if (!repos || repos.length === 0) {
-    grid.innerHTML = '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center;padding:2rem;">No matching repositories found.</p>';
-    return;
-  }
-
-  grid.innerHTML = repos.map(repo => {
-    const lang = repo.language || '';
-    const color = langColors[lang] || langColors.default;
-    const formattedName = repo.name.replace(/-/g, ' ').replace(/_/g, ' ');
-    const updatedTime = timeAgo(repo.updated_at);
-    const desc = repo.description || 'Repository for application code and engineering scripts.';
-
-    return `
-      <div class="project-card spotlight" onclick="window.open('${repo.html_url}', '_blank')">
-        <div>
-          <div class="project-top-row">
-            <h3 class="project-title">${formattedName}</h3>
-            <div class="project-links">
-              <a href="${repo.html_url}" target="_blank" class="project-link-btn" onclick="event.stopPropagation()" title="GitHub Source">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="14"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-1.93c-3.19.69-3.86-1.54-3.86-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.68 1.24 3.33.95.1-.74.4-1.24.72-1.53-2.55-.29-5.23-1.27-5.23-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 2.87-.39c.97 0 1.95.13 2.87.39 2.19-1.49 3.15-1.18 3.15-1.18.62 1.57.23 2.73.11 3.02.74.8 1.18 1.82 1.18 3.07 0 4.41-2.69 5.38-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.66.79.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.73 18.27.5 12 .5z"/></svg>
-              </a>
-              ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link-btn" onclick="event.stopPropagation()" title="Live Preview">↗</a>` : ''}
-            </div>
-          </div>
-          <p class="project-desc-text">${desc}</p>
-        </div>
-
-        <div class="project-footer-meta">
-          ${lang ? `<span class="project-lang-tag"><span class="skill-dot" style="background:${color}"></span>${lang}</span>` : '<span>Code</span>'}
-          <div class="project-stats-meta">
-            <span>★ ${repo.stargazers_count || 0}</span>
-            <span>⎇ ${repo.forks_count || 0}</span>
-            <span>${updatedTime}</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  initSpotlights();
-}
-
-function renderFallbackProjects() {
-  const fallbacks = [
-    { name: 'Portfolio Website', desc: 'Modern responsive developer portfolio with GitHub API integration.', lang: 'JavaScript', url: `https://github.com/${GITHUB_USER}` },
-    { name: 'Arduino IoT Controller', desc: 'Embedded C++ microcontroller logic for robotics sensors and control.', lang: 'C++', url: `https://github.com/${GITHUB_USER}` },
-    { name: 'Full-Stack Web App', desc: 'Dynamic web solution with database schema and REST API endpoints.', lang: 'PHP', url: `https://github.com/${GITHUB_USER}` },
-    { name: 'Python Automation Scripts', desc: 'Data parsing, automation, and utility tools built with Python.', lang: 'Python', url: `https://github.com/${GITHUB_USER}` },
-    { name: 'Database Management System', desc: 'Relational database architecture and MySQL optimization scripts.', lang: 'C#', url: `https://github.com/${GITHUB_USER}` },
-    { name: 'Physics & Electronics Simulation', desc: 'Circuit designs, PCB layouts, and electronic hardware projects.', lang: 'C++', url: `https://github.com/${GITHUB_USER}` }
-  ];
-
-  renderProjects(fallbacks.map(f => ({
-    name: f.name,
-    description: f.desc,
-    language: f.lang,
-    html_url: f.url,
-    stargazers_count: 0,
-    forks_count: 0,
-    updated_at: new Date().toISOString()
-  })));
-}
-
-/* Project Controls (Search & Language Filters) */
-function initProjectControls() {
-  const searchInput = document.getElementById('projectSearch');
-  const filterBtns = document.querySelectorAll('#projectFilters .filter-btn');
-
-  let activeLangFilter = 'all';
-
-  function applyFilters() {
-    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-
-    const filtered = allRepos.filter(repo => {
-      const nameMatch = repo.name.toLowerCase().includes(query);
-      const descMatch = (repo.description || '').toLowerCase().includes(query);
-      const langMatch = (repo.language || '').toLowerCase().includes(query);
-
-      const matchesQuery = !query || nameMatch || descMatch || langMatch;
-      const matchesLang = activeLangFilter === 'all' || (repo.language && repo.language.toLowerCase() === activeLangFilter.toLowerCase());
-
-      return matchesQuery && matchesLang;
+        document.querySelectorAll('.pcb-nav-link').forEach(link => {
+          if (link.dataset.circuitTarget === sectionId) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
+        });
+      }
     });
+  }, { threshold: 0.15 });
 
-    renderProjects(filtered);
-  }
+  sections.forEach(sec => observer.observe(sec));
 
-  if (searchInput) {
-    searchInput.addEventListener('input', applyFilters);
-  }
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeLangFilter = btn.dataset.filter;
-      applyFilters();
+    sections.forEach(section => {
+      const targets = Array.from(section.querySelectorAll('.pcb-card, .pcb-section-header'));
+      if (!targets || targets.length === 0) return;
+
+      gsap.from(targets, {
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 88%',
+          toggleActions: 'play none none none'
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        clearProps: 'transform,opacity,visibility'
+      });
     });
-  });
+  }
 }
 
 /* --------------------------------------------------------------------------
-   6. UTILITY & HELPER FUNCTIONS
+   9. HELPER & TERMINAL UTILITIES
    -------------------------------------------------------------------------- */
-function timeAgo(dateStr) {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins}m ago`;
-  const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  return `${Math.floor(months / 12)}y ago`;
-}
-
 function copyEmail(emailStr) {
   navigator.clipboard.writeText(emailStr).then(() => {
-    showToast(`Copied ${emailStr} to clipboard!`);
+    showToast(`COPIED ${emailStr} TO CLIPBOARD!`);
   }).catch(err => {
-    showToast('Failed to copy email.');
+    showToast('FAILED TO COPY EMAIL.');
   });
 }
 
 function showToast(msg) {
   const toast = document.getElementById('toast');
-  if (!toast) return;
-  toast.textContent = msg;
+  const toastMsg = document.getElementById('toastMsg');
+  if (!toast || !toastMsg) return;
+  toastMsg.textContent = msg;
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 3200);
+  }, 3400);
 }
 
 /* --------------------------------------------------------------------------
-   8. FORMSPREE CONTACT FORM HANDLER
+   10. CONTACT FORM HANDLER
    -------------------------------------------------------------------------- */
 async function handleForm(e) {
   e.preventDefault();
@@ -396,13 +784,13 @@ async function handleForm(e) {
   const formData = new FormData(form);
 
   submitBtn.disabled = true;
-  submitBtn.innerHTML = '<span>Sending Message...</span>';
+  submitBtn.innerHTML = '<span>SENDING MESSAGE...</span>';
 
   msgEl.style.display = 'block';
-  msgEl.style.background = 'rgba(99, 102, 241, 0.15)';
-  msgEl.style.color = '#818cf8';
-  msgEl.style.border = '1px solid rgba(99, 102, 241, 0.3)';
-  msgEl.textContent = '⏳ Sending message...';
+  msgEl.style.background = 'rgba(0, 240, 255, 0.15)';
+  msgEl.style.color = '#00f0ff';
+  msgEl.style.border = '1px solid rgba(0, 240, 255, 0.4)';
+  msgEl.textContent = '⚡ Transmitting your message...';
 
   try {
     const res = await fetch(FORMSPREE_URL, {
@@ -412,23 +800,23 @@ async function handleForm(e) {
     });
 
     if (res.ok) {
-      msgEl.style.background = 'rgba(16, 185, 129, 0.15)';
-      msgEl.style.color = '#34d399';
-      msgEl.style.border = '1px solid rgba(16, 185, 129, 0.3)';
-      msgEl.textContent = '✓ Message sent successfully! I will reply to you soon.';
+      msgEl.style.background = 'rgba(0, 255, 157, 0.15)';
+      msgEl.style.color = '#00ff9d';
+      msgEl.style.border = '1px solid rgba(0, 255, 157, 0.4)';
+      msgEl.textContent = '✓ THANK YOU! YOUR MESSAGE HAS BEEN SENT SUCCESSFULLY.';
       form.reset();
-      showToast('Message sent successfully!');
+      showToast('MESSAGE SENT SUCCESSFULLY!');
     } else {
       throw new Error('Server returned error status');
     }
   } catch (err) {
     console.error('Contact form submission error:', err);
     msgEl.style.background = 'rgba(239, 68, 68, 0.15)';
-    msgEl.style.color = '#f87171';
-    msgEl.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-    msgEl.textContent = '✕ Error sending message. Please email dilushanmehavannan@gmail.com directly.';
+    msgEl.style.color = '#ef4444';
+    msgEl.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+    msgEl.textContent = '✕ Transmission error. Please email directly to dilushanmehavannan@gmail.com.';
   } finally {
     submitBtn.disabled = false;
-    submitBtn.innerHTML = '<span>Send Message ↗</span>';
+    submitBtn.innerHTML = '<span>SEND MESSAGE ⚡</span>';
   }
 }
