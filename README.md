@@ -2,7 +2,7 @@
 
 A high-performance, dark-themed, interactive portfolio website for **Mehavannan Dilushan** — Full-Stack Developer & Physics/Electronics Specialist.
 
-![Portfolio Preview](photo.jpg)
+![Portfolio Preview](profile-photo.png)
 
 ## 🌟 Highlights & Key Features
 
@@ -25,7 +25,7 @@ A high-performance, dark-themed, interactive portfolio website for **Mehavannan 
 ├── index.html       # Semantic HTML5 markup with SEO & OpenGraph meta tags
 ├── style.css        # Vanilla CSS3 design system, animations, glassmorphic layout
 ├── script.js        # Vanilla JS GitHub API engine, interactive UI logic, form handler
-├── photo.jpg        # Profile photo asset
+├── profile-photo.png  # Profile photo asset
 ├── package.json     # Project metadata & serve script
 ├── vercel.json      # Vercel static deployment config
 └── README.md        # Documentation
