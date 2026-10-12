@@ -630,75 +630,47 @@ ul {
   box-shadow: 0 0 14px rgba(0, 255, 157, 0.22);
 }
 
-/* 3D Microchip Photo Frame Card */
+/* Editorial arch portrait card */
 .hero-chip-card {
   position: relative;
-  width: 290px;
-  height: 360px;
+  width: min(100%, 350px);
+  height: 425px;
   margin: 0 auto;
-  background: #091024;
-  border: 2px solid var(--copper-gold);
-  border-radius: 16px;
-  padding: 1.2rem;
-  box-shadow: var(--shadow-card), var(--glow-copper);
+  padding: 8px;
+  border: 1px solid rgba(0, 240, 255, 0.55);
+  border-radius: 48% 48% 28px 28px;
+  background: linear-gradient(145deg, rgba(0, 240, 255, 0.8), rgba(229, 169, 60, 0.8) 48%, rgba(0, 240, 255, 0.18));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), 0 0 36px rgba(0, 240, 255, 0.14);
   perspective: 1000px;
   transform-style: preserve-3d;
   transition: transform 0.2s ease-out;
-  cursor: pointer;
+}
+.hero-chip-card::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 14px -18px -14px 18px;
+  border: 1px solid rgba(229, 169, 60, 0.4);
+  border-radius: inherit;
+  transform: rotate(5deg);
+  transition: transform 0.35s ease, border-color 0.35s ease;
 }
 .hero-chip-card:hover {
-  border-color: var(--neon-cyan);
-  box-shadow: var(--shadow-card), var(--glow-cyan);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.58), 0 0 48px rgba(0, 240, 255, 0.24);
 }
-
-.chip-pins-left, .chip-pins-right {
-  position: absolute;
-  top: 40px;
-  bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.chip-pins-left { left: -14px; }
-.chip-pins-right { right: -14px; }
-
-.chip-pins-left i, .chip-pins-right i {
-  display: block;
-  width: 14px;
-  height: 6px;
-  background: linear-gradient(90deg, #9ca3af, #f3f4f6, #6b7280);
-  border-radius: 2px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-}
-
-.chip-surface-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.8rem;
-  font-family: var(--font-tech);
-  font-size: 0.7rem;
-  color: var(--copper-gold);
-  border-bottom: 1px dashed rgba(229, 169, 60, 0.3);
-  padding-bottom: 0.4rem;
-}
-
-.chip-notch-mark {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #040711;
-  border: 1px solid var(--copper-gold);
+.hero-chip-card:hover::before {
+  border-color: rgba(0, 240, 255, 0.7);
+  transform: rotate(2deg) translateY(-4px);
 }
 
 .photo-frame {
   position: relative;
   width: 100%;
-  height: 245px;
-  border-radius: 10px;
+  height: 100%;
+  border-radius: inherit;
   overflow: hidden;
-  border: 1px solid var(--pcb-border);
-  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  background: #091024;
+  transition: transform 0.25s ease-out;
   transform-style: preserve-3d;
 }
 
@@ -706,36 +678,62 @@ ul {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
-  filter: contrast(108%) brightness(95%);
-  transition: transform 0.3s ease, filter 0.3s ease;
+  object-position: center 26%;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .hero-chip-card:hover .hero-photo {
-  filter: contrast(115%) brightness(108%);
-  transform: scale(1.06);
+  transform: scale(1.045);
 }
 
-.photo-scanline {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(0, 240, 255, 0.08) 51%);
-  background-size: 100% 4px;
-  pointer-events: none;
-}
-.photo-scanline::after {
+.photo-frame::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent, #00f0ff, transparent);
-  box-shadow: 0 0 15px #00f0ff;
-  animation: holoScanBeam 3s ease-in-out infinite alternate;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 7, 17, 0.12) 0%, transparent 38%, rgba(4, 7, 17, 0.05) 54%, rgba(4, 7, 17, 0.9) 100%);
+  pointer-events: none;
 }
-@keyframes holoScanBeam {
-  0% { top: 0%; opacity: 0.3; }
-  100% { top: 96%; opacity: 1; }
+
+.photo-index {
+  position: absolute;
+  z-index: 1;
+  top: 22px;
+  left: 22px;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  color: #fff;
+  font-family: var(--font-tech);
+  font-size: 0.62rem;
+  letter-spacing: 0.13em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+.photo-index span {
+  color: var(--neon-cyan);
+}
+
+.photo-caption {
+  position: absolute;
+  z-index: 1;
+  right: 22px;
+  bottom: 24px;
+  left: 22px;
+  display: grid;
+  gap: 0.35rem;
+  pointer-events: none;
+}
+.photo-caption-name {
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+.photo-caption-role {
+  color: var(--neon-cyan);
+  font-family: var(--font-tech);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
 }
 
 .hero-status-badge {
@@ -755,6 +753,7 @@ ul {
   color: var(--neon-green);
   white-space: nowrap;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 12px rgba(0, 255, 157, 0.3);
+  z-index: 2;
 }
 
 .status-led-pulse {
@@ -2006,6 +2005,10 @@ ul {
   }
   .hero-photo-column {
     margin-top: 2rem;
+  }
+  .hero-chip-card {
+    width: min(100%, 330px);
+    height: 405px;
   }
   .about-grid, .contact-grid, .project-content-body {
     grid-template-columns: 1fr;
