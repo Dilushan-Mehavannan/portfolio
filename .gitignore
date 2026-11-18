@@ -22,3 +22,9 @@ Thumbs.db
 # Build files
 dist/
 build/
+
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
